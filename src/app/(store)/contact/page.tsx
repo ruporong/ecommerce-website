@@ -2,19 +2,31 @@ import connectToDatabase from '@/lib/mongodb';
 import Setting from '@/models/Setting';
 import ContactClient from './ContactClient';
 
-export const metadata = {
-  title: 'Contact Us | ÉLANE',
-  description: 'Get in touch with us for any inquiries, support, or feedback.',
-};
+export const dynamic = 'force-dynamic';
+
+export async function generateMetadata() {
+  await connectToDatabase();
+  const setting = await Setting.findOne({ key: 'store_name' }).lean();
+  const name = (setting as any)?.value || 'ÉLANE';
+  return {
+    title: `Contact Us | ${name}`,
+    description: 'Get in touch with us for any inquiries, support, or feedback.',
+  };
+}
 
 export default async function ContactPage() {
   await connectToDatabase();
   const settings = await Setting.find({
-    key: { $in: ['store_name', 'phone_number', 'email_address', 'address'] }
+    key: { $in: ['store_name', 'store_phone', 'store_email', 'store_address', 'phone_number', 'email_address', 'address'] }
   }).lean();
   
   const settingsMap = settings.reduce((acc: any, s: any) => ({ ...acc, [s.key]: s.value }), {});
   
+  const address = settingsMap.store_address || settingsMap.address || 'Dhaka, Bangladesh';
+  const email = settingsMap.store_email || settingsMap.email_address || 'hello@store.com';
+  const phone = settingsMap.store_phone || settingsMap.phone_number || '+880 1700 000 000';
+  const telLink = phone.replace(/[^\d+]/g, '') || '+8801700000000';
+
   return (
     <main className="min-h-screen bg-[#F9F9F9] py-16 md:py-24">
       <div className="max-w-6xl mx-auto px-4 md:px-8">
@@ -50,7 +62,7 @@ export default async function ContactPage() {
                   </div>
                   <div>
                     <h3 className="text-xs tracking-widest uppercase text-gray-400 mb-1.5">Office</h3>
-                    <p className="text-warm-white text-sm leading-relaxed">{settingsMap.address || 'Dhaka, Bangladesh'}</p>
+                    <p className="text-warm-white text-sm leading-relaxed whitespace-pre-line">{address}</p>
                   </div>
                 </div>
 
@@ -62,8 +74,8 @@ export default async function ContactPage() {
                   </div>
                   <div>
                     <h3 className="text-xs tracking-widest uppercase text-gray-400 mb-1.5">Email</h3>
-                    <a href={`mailto:${settingsMap.email_address || 'hello@store.com'}`} className="text-warm-white text-sm hover:text-dusty-rose transition-colors">
-                      {settingsMap.email_address || 'hello@store.com'}
+                    <a href={`mailto:${email}`} className="text-warm-white text-sm hover:text-dusty-rose transition-colors break-all">
+                      {email}
                     </a>
                   </div>
                 </div>
@@ -76,8 +88,8 @@ export default async function ContactPage() {
                   </div>
                   <div>
                     <h3 className="text-xs tracking-widest uppercase text-gray-400 mb-1.5">Phone</h3>
-                    <a href={`tel:${settingsMap.phone_number || '+8801700000000'}`} className="text-warm-white text-sm hover:text-dusty-rose transition-colors">
-                      {settingsMap.phone_number || '+880 1700 000 000'}
+                    <a href={`tel:${telLink}`} className="text-warm-white text-sm hover:text-dusty-rose transition-colors">
+                      {phone}
                     </a>
                   </div>
                 </div>

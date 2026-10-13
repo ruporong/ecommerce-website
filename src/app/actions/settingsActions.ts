@@ -76,6 +76,7 @@ export async function saveSettings(formData: FormData, path: string) {
     
     revalidatePath(path);
     revalidatePath('/'); // Revalidate storefront
+    revalidatePath('/contact');
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };
