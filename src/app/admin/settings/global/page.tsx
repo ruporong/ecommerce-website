@@ -18,6 +18,7 @@ export default async function Page() {
       title: 'Store Details',
       fields: [
         { name: 'store_name', label: 'Store Name', placeholder: 'e.g. My Awesome Store' },
+        { name: 'site_url', label: 'Website URL (Domain)', placeholder: 'https://www.ruporong.com', hint: 'Used for sitemap.xml, robots.txt, and SEO metadata.' },
         { name: 'store_email', label: 'Support Email', type: 'text', placeholder: 'e.g. support@store.com' },
         { name: 'store_phone', label: 'Support Phone', placeholder: 'e.g. +880 1700 000000' },
         { name: 'timezone', label: 'Timezone', type: 'select', options: [
