@@ -6,8 +6,9 @@ import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import HeaderSearch from '@/components/HeaderSearch';
+import FlashSaleBanner from '@/components/FlashSaleBanner';
 
-export default function Header({ menus = [], logoUrl }: { menus?: any[], logoUrl?: string | null }) {
+export default function Header({ menus = [], logoUrl, flashSale }: { menus?: any[], logoUrl?: string | null, flashSale?: any }) {
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -41,8 +42,10 @@ export default function Header({ menus = [], logoUrl }: { menus?: any[], logoUrl
   }
 
   return (
-    <header className="sticky top-0 w-full z-40 bg-warm-white/95 backdrop-blur-sm border-b border-gray-200">
-      <div className="max-w-[1920px] mx-auto px-4 md:px-8 h-20 flex items-center justify-between">
+    <header className="sticky top-0 w-full z-40">
+      {flashSale && <FlashSaleBanner data={flashSale} />}
+      <div className="w-full bg-warm-white/95 backdrop-blur-sm border-b border-gray-200">
+        <div className="max-w-[1920px] mx-auto px-4 md:px-8 h-20 flex items-center justify-between relative">
         
         {/* Mobile Menu */}
         <button 
@@ -124,6 +127,7 @@ export default function Header({ menus = [], logoUrl }: { menus?: any[], logoUrl
           </button>
         </div>
       </div>
+      </div>
 
       {/* Mobile Expandable Search Bar */}
       {mobileSearchOpen && (
@@ -136,7 +140,7 @@ export default function Header({ menus = [], logoUrl }: { menus?: any[], logoUrl
       )}
       
       {/* Mobile Menu Dropdown */}
-      <div className={`md:hidden absolute top-20 left-0 w-full bg-warm-white border-b border-gray-200 shadow-xl transition-all duration-300 ease-in-out ${mobileMenuOpen ? 'max-h-[85vh] overflow-y-auto opacity-100 visible' : 'max-h-0 opacity-0 invisible'}`}>
+      <div className={`md:hidden absolute top-full left-0 w-full bg-warm-white border-b border-gray-200 shadow-xl transition-all duration-300 ease-in-out ${mobileMenuOpen ? 'max-h-[85vh] overflow-y-auto opacity-100 visible' : 'max-h-0 opacity-0 invisible'}`}>
          <nav className="flex flex-col px-6 py-4 space-y-5">
            {/* Mobile Search inside drawer */}
            <div className="pb-3 border-b border-gray-200/80">

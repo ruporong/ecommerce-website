@@ -36,7 +36,7 @@ export default function FlashSaleBanner({ data }: { data: FlashSaleData | null }
   if (!data || new Date(data.end_time).getTime() < new Date().getTime()) return null;
 
   return (
-    <div className="bg-charcoal text-white py-2 px-4 text-center sticky top-0 z-[100] flex flex-col md:flex-row items-center justify-center gap-4 text-sm font-medium">
+    <div className="bg-charcoal text-white py-2 px-4 text-center w-full flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4 text-xs md:text-sm font-medium">
       <div className="flex items-center gap-2">
         <span className="bg-red-600 text-white px-2 py-0.5 rounded text-xs font-bold animate-pulse">FLASH SALE</span>
         <span>{data.title} - Up to {data.discount_percentage}% OFF!</span>

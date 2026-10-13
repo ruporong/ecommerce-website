@@ -7,7 +7,6 @@ import QuickViewModal from "@/components/QuickViewModal";
 import CartDrawer from "@/components/CartDrawer";
 import WebChat from "@/components/WebChat";
 import CartSyncListener from "@/components/CartSyncListener";
-import FlashSaleBanner from "@/components/FlashSaleBanner";
 import FlashSale from "@/models/FlashSale";
 import Script from "next/script";
 
@@ -67,8 +66,7 @@ export default async function StoreLayout({
         .text-warm-white { color: var(--color-warm-white) !important; }
       `}} />
       
-      <FlashSaleBanner data={flashSale} />
-      <Header menus={headerMenus} logoUrl={logoDark} />
+      <Header menus={headerMenus} logoUrl={logoDark} flashSale={flashSale} />
 
       {children}
 
