@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { createProduct, updateProduct } from '@/app/actions/product';
 import toast from 'react-hot-toast';
 import dynamic from 'next/dynamic';
+import { compressImage } from '@/lib/imageCompression';
 
 const JoditEditor = dynamic(() => import('jodit-react'), { ssr: false });
 
@@ -159,24 +160,30 @@ export default function ProductForm({
     }
   };
 
-  const handleMainImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleMainImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const filesArray = Array.from(e.target.files);
       if (mainImagePreviews.length + filesArray.length > 2) {
         toast.error("Maximum 2 main images allowed");
         return;
       }
-      setNewMainImages(prev => [...prev, ...filesArray]);
-      const newPreviews = filesArray.map(file => URL.createObjectURL(file));
+      const compressedFiles = await Promise.all(
+        filesArray.map(file => compressImage(file, 1600, 2000, 0.85))
+      );
+      setNewMainImages(prev => [...prev, ...compressedFiles]);
+      const newPreviews = compressedFiles.map(file => URL.createObjectURL(file));
       setMainImagePreviews(prev => [...prev, ...newPreviews]);
     }
   };
 
-  const handleGalleryImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleGalleryImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const filesArray = Array.from(e.target.files);
-      setNewGalleryImages(prev => [...prev, ...filesArray]);
-      const newPreviews = filesArray.map(file => URL.createObjectURL(file));
+      const compressedFiles = await Promise.all(
+        filesArray.map(file => compressImage(file, 1600, 2000, 0.85))
+      );
+      setNewGalleryImages(prev => [...prev, ...compressedFiles]);
+      const newPreviews = compressedFiles.map(file => URL.createObjectURL(file));
       setGalleryImagePreviews(prev => [...prev, ...newPreviews]);
     }
   };
@@ -246,46 +253,96 @@ export default function ProductForm({
     if (!categoryId) return toast.error("Category is required");
     
     setIsLoading(true);
+    const toastId = toast.loading("Processing and uploading images...");
 
-    const formData = new FormData();
-    formData.append('name', name);
-    formData.append('description', description);
-    formData.append('price', price.toString());
-    if (discountPrice) formData.append('discount_price', discountPrice.toString());
-    formData.append('stock', stock.toString());
-    formData.append('video_url', videoUrl);
-    formData.append('category_id', categoryId);
-    if (subCategoryId) formData.append('sub_category_id', subCategoryId);
-    if (brandId) formData.append('brand_id', brandId);
-    if (sizeChartId) formData.append('size_chart_id', sizeChartId);
-    
-    selectedColors.forEach(c => formData.append('colors', c));
-    selectedTags.forEach(t => formData.append('tags', t));
-    
-    formData.append('is_active', isActive.toString());
-    formData.append('meta_title', metaTitle);
-    formData.append('meta_description', metaDescription);
-    formData.append('meta_keywords', metaKeywords);
-    formData.append('faqs', JSON.stringify(faqs));
+    try {
+      // 1. Upload new main images individually
+      const uploadedMainUrls: string[] = [];
+      for (let i = 0; i < newMainImages.length; i++) {
+        toast.loading(`Uploading main image (${i + 1}/${newMainImages.length})...`, { id: toastId });
+        const compressed = await compressImage(newMainImages[i], 1600, 2000, 0.85);
+        const uploadForm = new FormData();
+        uploadForm.append('file', compressed);
+        uploadForm.append('folder', 'mini_e_store/products');
 
-    newMainImages.forEach(file => formData.append('mainImages', file));
-    newGalleryImages.forEach(file => formData.append('images', file));
+        const uploadRes = await fetch('/api/admin/upload', {
+          method: 'POST',
+          body: uploadForm,
+        });
+        const uploadData = await uploadRes.json();
+        if (!uploadRes.ok || !uploadData.success) {
+          throw new Error(uploadData.error || `Failed to upload main image ${i + 1}`);
+        }
+        uploadedMainUrls.push(uploadData.url);
+      }
 
-    if (initialData) {
-      formData.append('existingMainImages', JSON.stringify(initialData.mainImages || []));
-      formData.append('existingImages', JSON.stringify(initialData.images || []));
-    }
+      // 2. Upload new gallery images individually
+      const uploadedGalleryUrls: string[] = [];
+      for (let i = 0; i < newGalleryImages.length; i++) {
+        toast.loading(`Uploading gallery image (${i + 1}/${newGalleryImages.length})...`, { id: toastId });
+        const compressed = await compressImage(newGalleryImages[i], 1600, 2000, 0.85);
+        const uploadForm = new FormData();
+        uploadForm.append('file', compressed);
+        uploadForm.append('folder', 'mini_e_store/products');
 
-    const res = initialData 
-      ? await updateProduct(initialData._id, formData)
-      : await createProduct(formData);
+        const uploadRes = await fetch('/api/admin/upload', {
+          method: 'POST',
+          body: uploadForm,
+        });
+        const uploadData = await uploadRes.json();
+        if (!uploadRes.ok || !uploadData.success) {
+          throw new Error(uploadData.error || `Failed to upload gallery image ${i + 1}`);
+        }
+        uploadedGalleryUrls.push(uploadData.url);
+      }
 
-    if (res.success) {
-      toast.success(initialData ? 'Product updated' : 'Product created');
-      router.push('/admin/products');
-      router.refresh();
-    } else {
-      toast.error(res.error || 'Something went wrong');
+      toast.loading("Saving product details...", { id: toastId });
+
+      const formData = new FormData();
+      formData.append('name', name);
+      formData.append('description', description);
+      formData.append('price', price.toString());
+      if (discountPrice) formData.append('discount_price', discountPrice.toString());
+      formData.append('stock', stock.toString());
+      formData.append('video_url', videoUrl);
+      formData.append('category_id', categoryId);
+      if (subCategoryId) formData.append('sub_category_id', subCategoryId);
+      if (brandId) formData.append('brand_id', brandId);
+      if (sizeChartId) formData.append('size_chart_id', sizeChartId);
+      
+      selectedColors.forEach(c => formData.append('colors', c));
+      selectedTags.forEach(t => formData.append('tags', t));
+      
+      formData.append('is_active', isActive.toString());
+      formData.append('meta_title', metaTitle);
+      formData.append('meta_description', metaDescription);
+      formData.append('meta_keywords', metaKeywords);
+      formData.append('faqs', JSON.stringify(faqs));
+
+      // Append pre-uploaded URLs (very lightweight, few bytes each)
+      uploadedMainUrls.forEach(url => formData.append('mainImageUrls', url));
+      uploadedGalleryUrls.forEach(url => formData.append('imageUrls', url));
+
+      if (initialData) {
+        formData.append('existingMainImages', JSON.stringify(initialData.mainImages || []));
+        formData.append('existingImages', JSON.stringify(initialData.images || []));
+      }
+
+      const res = initialData 
+        ? await updateProduct(initialData._id, formData)
+        : await createProduct(formData);
+
+      if (res.success) {
+        toast.success(initialData ? 'Product updated successfully' : 'Product created successfully', { id: toastId });
+        router.push('/admin/products');
+        router.refresh();
+      } else {
+        toast.error(res.error || 'Something went wrong', { id: toastId });
+        setIsLoading(false);
+      }
+    } catch (err: any) {
+      console.error('Error saving product:', err);
+      toast.error(err.message || 'Error uploading images or saving product', { id: toastId });
       setIsLoading(false);
     }
   };

@@ -75,9 +75,15 @@ export async function createProduct(formData: FormData) {
 
     const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '') + '-' + Date.now().toString().slice(-4);
 
-    // Handle Image Uploads
-    const mainImages = await uploadFiles(formData, 'mainImages', 'mini_e_store/products');
-    const images = await uploadFiles(formData, 'images', 'mini_e_store/products');
+    // Handle Image Uploads (supports both pre-uploaded URLs and file uploads)
+    const uploadedMainUrls = formData.getAll('mainImageUrls') as string[];
+    const uploadedGalleryUrls = formData.getAll('imageUrls') as string[];
+
+    const newMainImages = await uploadFiles(formData, 'mainImages', 'mini_e_store/products');
+    const newImages = await uploadFiles(formData, 'images', 'mini_e_store/products');
+
+    const mainImages = [...uploadedMainUrls, ...newMainImages];
+    const images = [...uploadedGalleryUrls, ...newImages];
 
     await Product.create({
       name,
@@ -148,7 +154,10 @@ export async function updateProduct(id: string, formData: FormData) {
       return { success: false, error: 'Name, price, and category are required' };
     }
 
-    // Handle Image Uploads
+    // Handle Image Uploads (supports both pre-uploaded URLs and file uploads)
+    const uploadedMainUrls = formData.getAll('mainImageUrls') as string[];
+    const uploadedGalleryUrls = formData.getAll('imageUrls') as string[];
+
     const newMainImages = await uploadFiles(formData, 'mainImages', 'mini_e_store/products');
     const newImages = await uploadFiles(formData, 'images', 'mini_e_store/products');
     
@@ -158,11 +167,13 @@ export async function updateProduct(id: string, formData: FormData) {
     
     const finalMainImages = [
       ...(existingMainImagesStr ? JSON.parse(existingMainImagesStr) : []),
+      ...uploadedMainUrls,
       ...newMainImages
     ];
     
     const finalImages = [
       ...(existingImagesStr ? JSON.parse(existingImagesStr) : []),
+      ...uploadedGalleryUrls,
       ...newImages
     ];
 
