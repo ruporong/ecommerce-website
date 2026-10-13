@@ -1,0 +1,232 @@
+'use client';
+
+import { useState } from 'react';
+import { toast } from 'react-hot-toast';
+import { updatePurchaseStatus, updatePurchasePaymentStatus, deletePurchase } from '@/app/actions/purchaseActions';
+import Link from 'next/link';
+
+
+export default function PurchasesClient({ initialData, currentStatus }: { initialData: any[], currentStatus: string }) {
+  const [purchases, setPurchases] = useState(initialData);
+  const [confirmModal, setConfirmModal] = useState<{ 
+    isOpen: boolean; action: 'status' | 'payment_status' | 'delete'; id: string; val?: string; message: string 
+  }>({ isOpen: false, action: 'delete', id: '', message: '' });
+
+  const handleAction = async (id: string, action: 'status' | 'payment_status', val: string) => {
+    let res;
+    if (action === 'status') {
+      res = await updatePurchaseStatus(id, val);
+    } else {
+      res = await updatePurchasePaymentStatus(id, val);
+    }
+
+    if (res.success) {
+      toast.success(`Purchase updated successfully`);
+      if (action === 'status') {
+        if (currentStatus !== 'all' && currentStatus !== val) {
+          setPurchases(purchases.filter(p => p._id !== id));
+        } else {
+          setPurchases(purchases.map(p => p._id === id ? { ...p, status: val } : p));
+        }
+      } else {
+        setPurchases(purchases.map(p => p._id === id ? { ...p, payment_status: val } : p));
+      }
+    } else {
+      toast.error(res.error || 'Operation failed');
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    const res = await deletePurchase(id);
+    if (res.success) {
+      toast.success('Purchase deleted');
+      setPurchases(purchases.filter(p => p._id !== id));
+    } else {
+      toast.error(res.error || 'Operation failed');
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'pending': return 'bg-yellow-50 text-yellow-700 border-yellow-200';
+      case 'ordered': return 'bg-blue-50 text-blue-700 border-blue-200';
+      case 'received': return 'bg-green-50 text-green-700 border-green-200';
+      case 'cancelled': return 'bg-red-50 text-red-700 border-red-200';
+      default: return 'bg-gray-50 text-gray-700';
+    }
+  };
+
+  const getPaymentColor = (status: string) => {
+    switch (status) {
+      case 'unpaid': return 'bg-red-50 text-red-700';
+      case 'partial': return 'bg-yellow-50 text-yellow-700';
+      case 'paid': return 'bg-green-50 text-green-700';
+      default: return 'bg-gray-50 text-gray-700';
+    }
+  };
+
+  return (
+    <div className="p-6 md:p-10 w-full space-y-8">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Purchases</h1>
+          <p className="text-sm text-gray-500 mt-1">Manage stock replenishment and suppliers</p>
+        </div>
+        <Link 
+          href="/admin/purchases/add"
+          className="inline-flex items-center justify-center gap-2 bg-black text-white px-5 py-2.5 rounded-xl font-semibold hover:bg-gray-800 transition-all shadow-sm active:scale-95"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
+          Create Purchase
+        </Link>
+      </div>
+
+      {/* Tabs */}
+      <div className="flex space-x-1 bg-gray-100 p-1 rounded-xl w-fit">
+        {['all', 'pending', 'ordered', 'received', 'cancelled'].map((tab) => (
+          <Link
+            key={tab}
+            href={`/admin/purchases?status=${tab}`}
+            className={`px-4 py-2 text-sm font-semibold rounded-lg capitalize transition-all ${currentStatus === tab ? 'bg-white text-black shadow-sm' : 'text-gray-500 hover:text-gray-900'}`}
+          >
+            {tab}
+          </Link>
+        ))}
+      </div>
+
+      {/* Table Section */}
+      <div className="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse min-w-[800px]">
+            <thead>
+              <tr className="bg-gray-50/80 border-b border-gray-100">
+                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Purchase / Date</th>
+                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Supplier</th>
+                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Total Amount</th>
+                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Payment</th>
+                <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {purchases.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
+                    <div className="flex flex-col items-center justify-center">
+                      <svg className="w-12 h-12 text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+                      <p className="text-sm font-medium">No purchases found.</p>
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+                purchases.map((p) => (
+                  <tr key={p._id} className="hover:bg-gray-50/50 transition-colors group">
+                    <td className="px-6 py-4">
+                      <div className="flex flex-col">
+                        <span className="font-bold text-gray-900">{p.purchase_no}</span>
+                        <span className="text-xs text-gray-500 mt-0.5">{new Date(p.purchase_date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex flex-col">
+                        <span className="text-sm font-bold text-gray-900">{p.supplier_id?.name || 'Unknown Supplier'}</span>
+                        {p.reference_no && <span className="text-xs text-gray-500 mt-0.5">Ref: {p.reference_no}</span>}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex flex-col">
+                        <span className="text-sm font-bold text-gray-900">৳{p.grand_total.toLocaleString()}</span>
+                        <span className="text-xs text-gray-500 mt-0.5">{p.items?.length || 0} items</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex gap-2">
+                        <span className={`px-2.5 py-1 text-[10px] font-bold rounded-md uppercase tracking-wider border ${getStatusColor(p.status)}`}>
+                          {p.status}
+                        </span>
+                        {p.status !== 'received' && p.status !== 'cancelled' && (
+                          <button onClick={() => setConfirmModal({ isOpen: true, action: 'status', val: 'received', id: p._id, message: 'Mark as Received? This will INCREASE inventory stock for all items.' })} className="text-[10px] uppercase font-bold text-gray-400 hover:text-green-600 transition-colors bg-white px-2 rounded border hover:border-green-300">
+                            Receive
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex gap-2">
+                        <span className={`px-2.5 py-1 text-[10px] font-bold rounded-md uppercase tracking-wider ${getPaymentColor(p.payment_status)}`}>
+                          {p.payment_status}
+                        </span>
+                        {p.payment_status !== 'paid' && p.status !== 'cancelled' && (
+                          <button onClick={() => setConfirmModal({ isOpen: true, action: 'payment_status', val: 'paid', id: p._id, message: 'Mark as Paid? This will decrease the supplier balance.' })} className="text-[10px] uppercase font-bold text-gray-400 hover:text-green-600 transition-colors bg-white px-2 rounded border hover:border-green-300">
+                            Pay
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <div className="flex items-center justify-end gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                        <Link href={`/admin/purchases/${p._id}`} title="View Details" className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer">
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                        </Link>
+                        
+                        {p.status !== 'cancelled' && p.status !== 'received' && (
+                          <button onClick={() => setConfirmModal({ isOpen: true, action: 'status', val: 'cancelled', id: p._id, message: 'Are you sure you want to cancel this purchase order?' })} title="Cancel" className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer">
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                          </button>
+                        )}
+                        <button onClick={() => setConfirmModal({ isOpen: true, action: 'delete', id: p._id, message: 'Are you sure you want to permanently delete this purchase? If it was received, inventory will be reverted.' })} title="Delete" className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer">
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Custom Confirm Modal */}
+      {confirmModal.isOpen && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden flex flex-col animate-in zoom-in-95 duration-200">
+            <div className="p-6 text-center">
+              <div className={`w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center ${confirmModal.action === 'delete' ? 'bg-red-50 text-red-500' : 'bg-blue-50 text-blue-500'}`}>
+                {confirmModal.action === 'delete' ? (
+                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                ) : (
+                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                )}
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Are you sure?</h3>
+              <p className="text-sm text-gray-500">{confirmModal.message}</p>
+            </div>
+            <div className="p-4 bg-gray-50 border-t border-gray-100 flex gap-3">
+              <button 
+                onClick={() => setConfirmModal({ ...confirmModal, isOpen: false })} 
+                className="flex-1 px-4 py-2.5 bg-white border border-gray-300 text-gray-700 text-sm font-bold rounded-xl hover:bg-gray-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={async () => {
+                  setConfirmModal({ ...confirmModal, isOpen: false });
+                  if (confirmModal.action === 'delete') {
+                    await handleDelete(confirmModal.id);
+                  } else {
+                    await handleAction(confirmModal.id, confirmModal.action, confirmModal.val!);
+                  }
+                }} 
+                className={`flex-1 px-4 py-2.5 text-white text-sm font-bold rounded-xl transition-colors shadow-sm ${confirmModal.action === 'delete' ? 'bg-red-600 hover:bg-red-700' : 'bg-blue-600 hover:bg-blue-700'}`}
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
