@@ -36,51 +36,78 @@ function BannerForm({ defaultValues, bannerType, loading, onSubmit, onCancel }: 
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div className="md:col-span-2 flex justify-between items-center mb-2">
-        <h2 className="text-xl font-bold">{defaultValues ? 'Edit Banner' : 'Add New Banner'}</h2>
+    <form onSubmit={handleSubmit} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div className="md:col-span-2 flex justify-between items-center mb-1">
+        <h2 className="text-xl font-bold text-gray-900">{defaultValues ? 'Edit Banner' : 'Add New Banner'}</h2>
       </div>
 
-      <div className="md:col-span-2 bg-gray-50 p-6 rounded-xl border border-dashed border-gray-300">
-        <label className="block text-sm font-semibold mb-1">
-          Upload Image {defaultValues ? '' : '*'}
-        </label>
+      {/* Clean Single Image Upload Area */}
+      <div className="md:col-span-2 bg-gray-50/80 p-6 rounded-xl border border-gray-200">
+        <div className="flex justify-between items-start mb-1">
+          <label className="block text-sm font-semibold text-gray-800">
+            Upload Banner Image {defaultValues ? '' : '*'}
+          </label>
+        </div>
+        
         {bannerType === "auth" ? (
-          <p className="text-red-500 text-xs font-bold mt-2">Recommended size: 960x1080 px (Auth Slider). Maintain ratio to avoid layout issues.</p>
+          <p className="text-red-500 text-xs font-bold mb-3">Recommended size: 960x1080 px (Auth Slider). Maintain ratio to avoid layout issues.</p>
         ) : (
-          <p className="text-red-500 text-xs font-bold mt-2">Recommended size: 1920x800 px (Home Banner). Maintain ratio to avoid layout issues.</p>
+          <p className="text-red-500 text-xs font-bold mb-3">Recommended size: 1920x800 px (Home Banner). Maintain ratio to avoid layout issues.</p>
         )}
-        <div className="flex flex-col gap-4 mt-2">
-          <div className="flex items-center gap-4 w-full">
-            <div className="flex-1 bg-white p-2 border border-gray-200 rounded-lg">
-              <input 
-                type="file" 
-                ref={fileInputRef} 
-                onChange={handleImageChange}
-                accept="image/*" 
-                className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
-              />
-            </div>
-            <div className="text-center font-bold text-gray-400 text-xs">OR</div>
-            <div className="flex-1">
-              <input 
-                name="image" 
-                defaultValue={defaultValues?.image} 
-                placeholder="Paste Image URL (Optional if file uploaded)" 
-                className="w-full border border-gray-300 rounded-lg px-4 py-3 bg-white text-sm outline-none focus:border-black" 
-              />
-            </div>
+
+        <div className="flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-xl hover:border-gray-400 transition-colors bg-white">
+          <div className="space-y-3 text-center w-full">
+            {preview ? (
+              <div className="relative mx-auto max-w-md h-48 rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-gray-50">
+                <img src={preview} alt="Selected Banner" className="w-full h-full object-cover" />
+                <button 
+                  type="button" 
+                  onClick={() => { setSelectedFile(null); setPreview(null); }}
+                  className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1.5 shadow-md hover:bg-red-600 hover:scale-110 transition-all"
+                  title="Remove Image"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center">
+                <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 mb-2">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                  </svg>
+                </div>
+                <label className="cursor-pointer font-semibold text-black hover:text-white bg-gray-100 hover:bg-black px-6 py-2.5 rounded-xl text-sm transition-all shadow-xs inline-block">
+                  <span>Choose Image File</span>
+                  <input 
+                    type="file" 
+                    name="imageFile"
+                    ref={fileInputRef} 
+                    onChange={handleImageChange}
+                    accept="image/*" 
+                    className="sr-only" 
+                  />
+                </label>
+                <p className="text-xs text-gray-400 mt-2">PNG, JPG, WEBP (Upload directly from device)</p>
+              </div>
+            )}
+
+            {preview && (
+              <div className="flex justify-center pt-1">
+                <label className="cursor-pointer text-xs font-semibold text-gray-600 hover:text-black underline">
+                  <span>Change Image</span>
+                  <input 
+                    type="file" 
+                    name="imageFile"
+                    ref={fileInputRef} 
+                    onChange={handleImageChange}
+                    accept="image/*" 
+                    className="sr-only" 
+                  />
+                </label>
+              </div>
+            )}
           </div>
         </div>
-
-        {preview && (
-          <div className="mt-4 relative rounded-xl overflow-hidden border border-gray-200 inline-block bg-white">
-            <img src={preview} alt="Preview" className="h-40 object-cover" />
-            <div className="absolute inset-0 bg-black/5 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
-               <span className="bg-black/70 text-white text-xs px-2 py-1 rounded">Selected Image</span>
-            </div>
-          </div>
-        )}
       </div>
       
       <div>
@@ -90,7 +117,7 @@ function BannerForm({ defaultValues, bannerType, loading, onSubmit, onCancel }: 
         <input 
           name="title" 
           defaultValue={defaultValues?.title} 
-          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-black focus:border-transparent outline-none transition-all" 
+          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-black focus:border-transparent outline-none transition-all text-sm" 
           placeholder="E.g. THE NEW SEASON." 
         />
       </div>
@@ -102,7 +129,7 @@ function BannerForm({ defaultValues, bannerType, loading, onSubmit, onCancel }: 
         <input 
           name="subtitle" 
           defaultValue={defaultValues?.subtitle} 
-          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-black focus:border-transparent outline-none transition-all" 
+          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-black focus:border-transparent outline-none transition-all text-sm" 
           placeholder="E.g. Modern silhouettes." 
         />
       </div>
@@ -114,7 +141,7 @@ function BannerForm({ defaultValues, bannerType, loading, onSubmit, onCancel }: 
         <input 
           name="link" 
           defaultValue={defaultValues?.link} 
-          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-black focus:border-transparent outline-none transition-all" 
+          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-black focus:border-transparent outline-none transition-all text-sm" 
           placeholder="E.g. /category/dresses or leave blank" 
         />
       </div>
@@ -126,7 +153,7 @@ function BannerForm({ defaultValues, bannerType, loading, onSubmit, onCancel }: 
         <input 
           name="button_text" 
           defaultValue={defaultValues?.button_text ?? "Shop Now"} 
-          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-black focus:border-transparent outline-none transition-all" 
+          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-black focus:border-transparent outline-none transition-all text-sm" 
           placeholder="Shop Now"
         />
       </div>
@@ -137,7 +164,7 @@ function BannerForm({ defaultValues, bannerType, loading, onSubmit, onCancel }: 
           name="order" 
           type="number" 
           defaultValue={defaultValues?.order || 0} 
-          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-black focus:border-transparent outline-none transition-all" 
+          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-black focus:border-transparent outline-none transition-all text-sm" 
         />
       </div>
 
@@ -145,14 +172,14 @@ function BannerForm({ defaultValues, bannerType, loading, onSubmit, onCancel }: 
         <button 
           type="button" 
           onClick={onCancel} 
-          className="px-6 py-2.5 rounded-lg font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 transition-colors"
+          className="px-6 py-2.5 rounded-lg font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 transition-colors text-sm"
         >
           Cancel
         </button>
         <button 
           type="submit"
           disabled={loading} 
-          className="bg-black text-white px-6 py-2.5 rounded-lg font-bold disabled:opacity-50 hover:bg-gray-800 transition-colors flex items-center gap-2"
+          className="bg-black text-white px-6 py-2.5 rounded-lg font-bold disabled:opacity-50 hover:bg-gray-800 transition-colors flex items-center gap-2 text-sm"
         >
           {loading ? (
             <>
@@ -180,11 +207,11 @@ export default function BannersClient({ initialData, bannerType = "home" }: { in
     setLoading(true);
     formData.append("type", bannerType);
     
-    // Check if we have file or text URL
+    // Check if we have file
     if (file) {
-      formData.append('imageFile', file);
-    } else if (!formData.get('image')?.toString().trim()) {
-      toast.error('Please choose an image file or paste an image URL');
+      formData.set('imageFile', file);
+    } else {
+      toast.error('Please choose an image file to upload');
       setLoading(false);
       return;
     }
@@ -206,7 +233,9 @@ export default function BannersClient({ initialData, bannerType = "home" }: { in
     
     setLoading(true);
     if (file) {
-      formData.append('imageFile', file);
+      formData.set('imageFile', file);
+    } else if (editingBanner.image) {
+      formData.set('image', editingBanner.image);
     }
 
     const res = await updateBanner(editingBanner._id, formData);

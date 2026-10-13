@@ -64,7 +64,7 @@ export async function createBanner(formData: FormData) {
     }
 
     if (!imageUrl) {
-      return { success: false, error: 'Image is required' };
+      return { success: false, error: 'Please choose an image file to upload' };
     }
 
     const banner = await Banner.create({
