@@ -52,11 +52,13 @@ export default function HomeClient({ banners, sections, categories = [], product
                 <span className="text-xs tracking-widest uppercase mb-4 block">{slide.campaign}</span>
                 <h2 className="font-serif text-5xl md:text-[82px] leading-[0.9] mb-6 whitespace-pre-line">{slide.title}</h2>
                 <p className="font-serif text-lg md:text-xl italic mb-10 text-warm-white/90">{slide.subtitle}</p>
-                <div className={`flex ${idx === 0 ? 'flex-col sm:flex-row gap-4' : 'justify-end'}`}>
-                  <a href={slide.link} className={`px-8 py-4 bg-warm-white text-charcoal text-[13px] tracking-widest uppercase font-medium rounded-elane ${idx === 0 ? 'hover:bg-dusty-rose' : 'hover:bg-deep-burgundy'} hover:text-white transition-colors text-center inline-block`}>
-                    {slide.primaryBtn}
-                  </a>
-                </div>
+                {slide.primaryBtn && (
+                  <div className={`flex ${idx === 0 ? 'flex-col sm:flex-row gap-4' : 'justify-end'}`}>
+                    <a href={slide.link || '#'} className={`px-8 py-4 bg-warm-white text-charcoal text-[13px] tracking-widest uppercase font-medium rounded-elane ${idx === 0 ? 'hover:bg-dusty-rose' : 'hover:bg-deep-burgundy'} hover:text-white transition-colors text-center inline-block`}>
+                      {slide.primaryBtn}
+                    </a>
+                  </div>
+                )}
               </div>
             </div>
           </div>
