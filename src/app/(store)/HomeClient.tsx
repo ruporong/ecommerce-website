@@ -46,15 +46,18 @@ export default function HomeClient({ banners, sections, categories = [], product
               <PlaceholderImage className="absolute inset-0 w-full h-full object-cover object-top md:object-center" /> : 
               <img src={slide.image} alt={slide.title} className="absolute inset-0 w-full h-full object-cover object-top md:object-center" />
             }
-            <div className={`absolute inset-0 ${idx === 0 ? 'bg-gradient-to-r from-black/40 to-transparent' : 'bg-black/20'}`}></div>
-            <div className={`absolute inset-0 flex items-center ${idx === 0 ? 'justify-start' : 'justify-end'} max-w-[1920px] mx-auto px-4 md:px-16`}>
-              <div className={`text-warm-white ${idx === 0 ? 'max-w-xl animate-fade-in-up' : 'max-w-lg text-right'}`}>
-                <span className="text-xs tracking-widest uppercase mb-4 block">{slide.campaign}</span>
-                <h2 className="font-serif text-5xl md:text-[82px] leading-[0.9] mb-6 whitespace-pre-line">{slide.title}</h2>
-                <p className="font-serif text-lg md:text-xl italic mb-10 text-warm-white/90">{slide.subtitle}</p>
+            <div className="absolute inset-0 bg-gradient-to-r from-white/30 via-white/10 to-transparent pointer-events-none"></div>
+            <div className="absolute inset-0 flex items-center justify-start max-w-[1920px] mx-auto px-6 md:px-20">
+              <div className="max-w-xl text-left animate-fade-in-up">
+                <span className="text-xs tracking-widest uppercase mb-4 block text-black/75 font-semibold">{slide.campaign}</span>
+                <h2 className="font-serif text-5xl md:text-[82px] leading-[0.9] mb-6 whitespace-pre-line text-black font-normal">{slide.title}</h2>
+                <p className="font-serif text-lg md:text-xl italic mb-10 text-black/85">{slide.subtitle}</p>
                 {slide.primaryBtn && (
-                  <div className={`flex ${idx === 0 ? 'flex-col sm:flex-row gap-4' : 'justify-end'}`}>
-                    <a href={slide.link || '#'} className={`px-8 py-4 bg-warm-white text-charcoal text-[13px] tracking-widest uppercase font-medium rounded-2xl ${idx === 0 ? 'hover:bg-dusty-rose' : 'hover:bg-deep-burgundy'} hover:text-white transition-colors text-center inline-block`}>
+                  <div className="flex justify-start">
+                    <a 
+                      href={slide.link || '#'} 
+                      className="px-8 py-4 bg-white text-black border border-black/15 shadow-sm hover:bg-black hover:text-white transition-all text-center inline-block text-[13px] tracking-widest uppercase font-medium rounded-2xl"
+                    >
                       {slide.primaryBtn}
                     </a>
                   </div>
@@ -65,17 +68,17 @@ export default function HomeClient({ banners, sections, categories = [], product
         ))}
         
         {/* Slider Controls */}
-        <div className="absolute bottom-8 left-0 right-0 flex justify-between items-center max-w-[1920px] mx-auto px-4 md:px-16 z-20">
-          <div className="flex items-center gap-4 text-warm-white font-medium text-sm">
-            <button onClick={() => setActiveSlide((prev) => (prev - 1 + slides.length) % slides.length)} className="w-10 h-10 rounded-full border border-warm-white/30 flex items-center justify-center hover:bg-warm-white hover:text-charcoal transition-colors">
+        <div className="absolute bottom-8 left-0 right-0 flex justify-between items-center max-w-[1920px] mx-auto px-6 md:px-20 z-20">
+          <div className="flex items-center gap-4 text-black font-medium text-sm">
+            <button onClick={() => setActiveSlide((prev) => (prev - 1 + slides.length) % slides.length)} className="w-10 h-10 rounded-full border border-black/30 bg-white/40 backdrop-blur-sm flex items-center justify-center hover:bg-black hover:text-white transition-colors">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M15 18l-6-6 6-6"/></svg>
             </button>
             <span>0{activeSlide + 1}</span>
-            <div className="w-24 md:w-48 h-px bg-warm-white/30 relative">
-              <div className="absolute left-0 top-0 bottom-0 bg-warm-white transition-all duration-300" style={{ width: `${((activeSlide + 1) / slides.length) * 100}%` }}></div>
+            <div className="w-24 md:w-48 h-px bg-black/30 relative">
+              <div className="absolute left-0 top-0 bottom-0 bg-black transition-all duration-300" style={{ width: `${((activeSlide + 1) / slides.length) * 100}%` }}></div>
             </div>
             <span>0{slides.length}</span>
-            <button onClick={() => setActiveSlide((prev) => (prev + 1) % slides.length)} className="w-10 h-10 rounded-full border border-warm-white/30 flex items-center justify-center hover:bg-warm-white hover:text-charcoal transition-colors">
+            <button onClick={() => setActiveSlide((prev) => (prev + 1) % slides.length)} className="w-10 h-10 rounded-full border border-black/30 bg-white/40 backdrop-blur-sm flex items-center justify-center hover:bg-black hover:text-white transition-colors">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M9 18l6-6-6-6"/></svg>
             </button>
           </div>
