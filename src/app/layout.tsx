@@ -15,7 +15,7 @@ export const dynamic = 'force-dynamic';
 
 export async function generateMetadata(): Promise<Metadata> {
   let faviconUrl = '/favicon.ico';
-  let storeName = 'ÉLANE';
+  let storeName = 'Ruporong';
   let googleVerificationCode = '';
 
   try {

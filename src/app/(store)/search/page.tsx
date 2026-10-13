@@ -1,15 +1,19 @@
 import connectToDatabase from '@/lib/mongodb';
 import Product from '@/models/Product';
 import Category from '@/models/Category';
+import Setting from '@/models/Setting';
 import ProductCard from '@/components/ProductCard';
 import Link from 'next/link';
 
 export async function generateMetadata({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
   const params = await searchParams;
   const q = params?.q || '';
+  await connectToDatabase();
+  const storeSetting = await Setting.findOne({ key: 'store_name' }).lean();
+  const storeName = (storeSetting as any)?.value || 'Ruporong';
   return {
-    title: q ? `Search results for "${q}" | ÉLANE` : `Search Products | ÉLANE`,
-    description: `Explore search results for "${q}" at ÉLANE.`
+    title: q ? `Search results for "${q}" | ${storeName}` : `Search Products | ${storeName}`,
+    description: `Explore search results for "${q}" at ${storeName}.`
   };
 }
 

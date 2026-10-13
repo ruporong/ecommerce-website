@@ -22,7 +22,7 @@ async function seed() {
   });
   console.log('Product seeded...');
 
-  await Setting.create({ key: 'site_name', value: 'ÉLANE' });
+  await Setting.create({ key: 'site_name', value: 'Ruporong' });
   console.log('Settings seeded...');
 
   process.exit(0);

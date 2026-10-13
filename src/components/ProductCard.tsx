@@ -52,7 +52,7 @@ export default function ProductCard({ product }: { product: any }) {
   return (
     <div className="group block relative">
       <Link href={`/product/${product.slug}`} className="block">
-        <div className="relative aspect-[4/5] overflow-hidden bg-gray-100 rounded-elane mb-4">
+        <div className="relative aspect-[4/5] overflow-hidden bg-gray-100 rounded-2xl mb-4">
           {mainImage ? (
             <img 
               src={mainImage} 

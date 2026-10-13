@@ -5,6 +5,7 @@ import { GoogleGenAI } from '@google/genai';
 import connectToDatabase from '@/lib/mongodb';
 import Product from '@/models/Product';
 import Order from '@/models/Order';
+import Setting from '@/models/Setting';
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
@@ -21,13 +22,15 @@ export async function POST(req: Request) {
 
     await connectToDatabase();
     const products = await Product.find({ is_active: true });
+    const storeSetting = await Setting.findOne({ key: 'store_name' }).lean();
+    const storeName = (storeSetting as any)?.value || 'Ruporong';
     
     let catalog = "Available Products and Prices:\n";
     products.forEach((p) => {
       catalog += `- ${p.name}: ৳${p.price}\n`;
     });
 
-    const systemInstruction = `You are a sales assistant for a clothing store named ÉLANE. Your goal is to collect the customer's name, delivery address, and the specific product they want to order.
+    const systemInstruction = `You are a sales assistant for an e-commerce clothing store named ${storeName}. Your goal is to collect the customer's name, delivery address, and the specific product they want to order.
 Here is the current catalog:\n${catalog}
 When asked about prices or products, only refer to this catalog. If they ask for something not in the catalog, tell them it's unavailable.
 Keep your responses short, polite, and in the language the user speaks.

@@ -2,6 +2,7 @@ import connectToDatabase from '@/lib/mongodb';
 import Category from '@/models/Category';
 import SubCategory from '@/models/SubCategory';
 import Product from '@/models/Product';
+import Setting from '@/models/Setting';
 import ProductCard from '@/components/ProductCard';
 import CategoryFilter from '@/components/CategoryFilter';
 import Link from 'next/link';
@@ -12,8 +13,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   await connectToDatabase();
   const category = await Category.findOne({ slug: resolvedParams.slug, is_active: true }).lean();
   if (!category) return { title: 'Category Not Found' };
+  const storeSetting = await Setting.findOne({ key: 'store_name' }).lean();
+  const storeName = (storeSetting as any)?.value || 'Ruporong';
   return {
-    title: category.meta_title || `${category.name} | ÉLANE`,
+    title: category.meta_title || `${category.name} | ${storeName}`,
     description: category.meta_description || `Explore our ${category.name} collection.`
   };
 }

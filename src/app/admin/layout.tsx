@@ -18,7 +18,7 @@ export async function generateMetadata() {
 }
 
 export default async function AdminLayout({ children }: { children: ReactNode }) {
-  let storeName = 'ÉLANE';
+  let storeName = 'Ruporong';
   let logoUrl = null;
 
   try {

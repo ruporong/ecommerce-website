@@ -2866,8 +2866,8 @@ const products = [
   }
 ];
 
-let cart = JSON.parse(localStorage.getItem('elane_cart')) || [];
-let wishlist = JSON.parse(localStorage.getItem('elane_wishlist')) || [];
+let cart = JSON.parse(localStorage.getItem('ruporong_cart')) || [];
+let wishlist = JSON.parse(localStorage.getItem('ruporong_wishlist')) || [];
 
 function formatPrice(price) {
   return '৳' + price.toLocaleString('en-IN');
@@ -2911,7 +2911,7 @@ function renderProducts() {
       
       const card = `
         <div class="group flex flex-col relative" data-id="${p.id}">
-          <div class="relative w-full h-[300px] md:h-[450px] bg-gray-100 rounded-elane overflow-hidden mb-4">
+          <div class="relative w-full h-[300px] md:h-[450px] bg-gray-100 rounded-ruporong overflow-hidden mb-4">
             <a href="details.html?id=${p.id}" class="absolute inset-0 z-10"></a>
             <img src="${p.image}" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 group-hover:opacity-0" alt="${p.name}">
             <img src="${p.hoverImage}" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 opacity-0 group-hover:opacity-100 scale-105 group-hover:scale-100 transition-transform" alt="${p.name} Alt">
@@ -2925,8 +2925,8 @@ function renderProducts() {
             </button>
             
             <div class="absolute bottom-4 left-4 right-4 flex gap-2 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 z-20">
-              <button class="flex-1 bg-white/90 backdrop-blur text-charcoal text-[11px] tracking-widest uppercase py-3 rounded-elane hover:bg-charcoal hover:text-white transition-colors btn-quick-add">Quick Add</button>
-              <button class="w-12 bg-white/90 backdrop-blur flex items-center justify-center rounded-elane hover:bg-charcoal hover:text-white transition-colors btn-quick-view">
+              <button class="flex-1 bg-white/90 backdrop-blur text-charcoal text-[11px] tracking-widest uppercase py-3 rounded-ruporong hover:bg-charcoal hover:text-white transition-colors btn-quick-add">Quick Add</button>
+              <button class="w-12 bg-white/90 backdrop-blur flex items-center justify-center rounded-ruporong hover:bg-charcoal hover:text-white transition-colors btn-quick-view">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
               </button>
             </div>
@@ -3012,7 +3012,7 @@ function addToCart(product, size = 'S', color = 'Burgundy') {
   } else {
     cart.push({ ...product, quantity: 1, size, color });
   }
-  localStorage.setItem('elane_cart', JSON.stringify(cart));
+  localStorage.setItem('ruporong_cart', JSON.stringify(cart));
   updateCartUI();
   
   // Show toast or open drawer
@@ -3026,7 +3026,7 @@ function toggleWishlist(productId) {
   } else {
     wishlist.push(productId);
   }
-  localStorage.setItem('elane_wishlist', JSON.stringify(wishlist));
+  localStorage.setItem('ruporong_wishlist', JSON.stringify(wishlist));
   updateWishlistUI();
   renderProducts(); // re-render to update icons
 }
@@ -3040,7 +3040,7 @@ $(document).ready(() => {
   $(document).on('click', '.btn-increase', function() {
     const idx = $(this).data('index');
     cart[idx].quantity += 1;
-    localStorage.setItem('elane_cart', JSON.stringify(cart));
+    localStorage.setItem('ruporong_cart', JSON.stringify(cart));
     updateCartUI();
   });
   
@@ -3051,14 +3051,14 @@ $(document).ready(() => {
     } else {
       cart.splice(idx, 1);
     }
-    localStorage.setItem('elane_cart', JSON.stringify(cart));
+    localStorage.setItem('ruporong_cart', JSON.stringify(cart));
     updateCartUI();
   });
   
   $(document).on('click', '.btn-remove', function() {
     const idx = $(this).data('index');
     cart.splice(idx, 1);
-    localStorage.setItem('elane_cart', JSON.stringify(cart));
+    localStorage.setItem('ruporong_cart', JSON.stringify(cart));
     updateCartUI();
   });
   

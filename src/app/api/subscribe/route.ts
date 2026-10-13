@@ -28,11 +28,13 @@ export async function POST(req: Request) {
         if (app) {
           const titleSetting = await Setting.findOne({ key: 'msg_welcome_title' });
           const bodySetting = await Setting.findOne({ key: 'msg_welcome_body' });
+          const storeNameSetting = await Setting.findOne({ key: 'store_name' });
+          const storeName = storeNameSetting?.value || 'Ruporong';
           
           await getMessaging(app).send({
             token,
             notification: {
-              title: titleSetting?.value || 'Welcome to ÉLANE! 🎉',
+              title: titleSetting?.value || `Welcome to ${storeName}! 🎉`,
               body: bodySetting?.value || 'Thank you for subscribing. Use code WELCOME10 for 10% off your first order!',
             },
           }).catch(console.error);

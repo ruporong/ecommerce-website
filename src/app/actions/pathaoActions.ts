@@ -59,6 +59,8 @@ export async function bookPathaoCourier(orderId: string) {
     
     let activeStoreId = storeId?.value;
     const storePhoneSetting = await Setting.findOne({ key: 'store_phone' });
+    const storeNameSetting = await Setting.findOne({ key: 'store_name' });
+    const senderName = storeNameSetting?.value || "Ruporong";
     let senderPhone = storePhoneSetting?.value || "01711111111";
     // Sanitize phone to exactly 11 digits starting with 01
     senderPhone = senderPhone.replace(/[^0-9]/g, '');
@@ -89,7 +91,7 @@ export async function bookPathaoCourier(orderId: string) {
     const payload = {
       store_id: activeStoreId,
       merchant_order_id: order.order_id,
-      sender_name: "ÉLANE",
+      sender_name: senderName,
       sender_phone: senderPhone,
       recipient_name: order.customer_name,
       recipient_phone: order.customer_phone || "01711111111",

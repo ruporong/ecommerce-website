@@ -53,7 +53,7 @@ export default function QuickViewModal() {
       ></div>
       
       <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 transition-opacity duration-300">
-        <div className="bg-white rounded-elane w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-2xl flex flex-col md:flex-row relative">
+        <div className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-2xl flex flex-col md:flex-row relative">
           <button 
             className="absolute top-4 right-4 z-10 w-8 h-8 bg-white/80 backdrop-blur rounded-full flex items-center justify-center hover:bg-white transition-colors"
             onClick={closeQuickView}
@@ -121,7 +121,7 @@ export default function QuickViewModal() {
             
             <button 
               onClick={handleQuickAdd} 
-              className="w-full py-4 bg-charcoal text-white text-[13px] tracking-widest uppercase font-medium rounded-elane hover:bg-dusty-rose transition-colors"
+              className="w-full py-4 bg-charcoal text-white text-[13px] tracking-widest uppercase font-medium rounded-2xl hover:bg-dusty-rose transition-colors"
             >
               Add to Bag
             </button>

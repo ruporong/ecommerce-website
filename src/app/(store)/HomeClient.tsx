@@ -54,7 +54,7 @@ export default function HomeClient({ banners, sections, categories = [], product
                 <p className="font-serif text-lg md:text-xl italic mb-10 text-warm-white/90">{slide.subtitle}</p>
                 {slide.primaryBtn && (
                   <div className={`flex ${idx === 0 ? 'flex-col sm:flex-row gap-4' : 'justify-end'}`}>
-                    <a href={slide.link || '#'} className={`px-8 py-4 bg-warm-white text-charcoal text-[13px] tracking-widest uppercase font-medium rounded-elane ${idx === 0 ? 'hover:bg-dusty-rose' : 'hover:bg-deep-burgundy'} hover:text-white transition-colors text-center inline-block`}>
+                    <a href={slide.link || '#'} className={`px-8 py-4 bg-warm-white text-charcoal text-[13px] tracking-widest uppercase font-medium rounded-2xl ${idx === 0 ? 'hover:bg-dusty-rose' : 'hover:bg-deep-burgundy'} hover:text-white transition-colors text-center inline-block`}>
                       {slide.primaryBtn}
                     </a>
                   </div>

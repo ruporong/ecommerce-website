@@ -5,7 +5,7 @@ import { signOut } from 'next-auth/react';
 import Sidebar from './Sidebar';
 import AdminNotifications from './AdminNotifications';
 
-export default function AdminShell({ children, logoUrl, storeName = 'ÉLANE' }: { children: React.ReactNode, logoUrl?: string | null, storeName?: string }) {
+export default function AdminShell({ children, logoUrl, storeName = 'Ruporong' }: { children: React.ReactNode, logoUrl?: string | null, storeName?: string }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (

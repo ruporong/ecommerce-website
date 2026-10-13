@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 export async function generateMetadata() {
   await connectToDatabase();
   const setting = await Setting.findOne({ key: 'store_name' }).lean();
-  const name = (setting as any)?.value || 'ÉLANE';
+  const name = (setting as any)?.value || 'Ruporong';
   return {
     title: `Contact Us | ${name}`,
     description: 'Get in touch with us for any inquiries, support, or feedback.',

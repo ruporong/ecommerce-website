@@ -111,7 +111,7 @@ export default function TemplateClient({ templates: initial }: { templates: any[
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Email Subject</label>
-                <input required type="text" value={formData.subject} onChange={e => setFormData({...formData, subject: e.target.value})} className="w-full border border-gray-300 rounded-lg p-2.5 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500" placeholder="e.g. Welcome to ÉLANE" />
+                <input required type="text" value={formData.subject} onChange={e => setFormData({...formData, subject: e.target.value})} className="w-full border border-gray-300 rounded-lg p-2.5 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500" placeholder="e.g. Welcome to Ruporong" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">HTML Body</label>

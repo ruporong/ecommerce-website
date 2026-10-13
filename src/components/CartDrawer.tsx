@@ -88,7 +88,7 @@ export default function CartDrawer() {
             <span className="text-sm font-medium">Subtotal</span>
             <span className="font-serif text-xl">৳{totalPrice}</span>
           </div>
-          <Link href="/checkout" onClick={closeDrawer} className="w-full py-4 bg-charcoal text-white text-[13px] tracking-widest uppercase font-medium rounded-elane hover:bg-dusty-rose transition-colors flex justify-center">
+          <Link href="/checkout" onClick={closeDrawer} className="w-full py-4 bg-charcoal text-white text-[13px] tracking-widest uppercase font-medium rounded-2xl hover:bg-dusty-rose transition-colors flex justify-center">
             Checkout
           </Link>
         </div>
