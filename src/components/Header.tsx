@@ -63,7 +63,7 @@ export default function Header({ menus = [], logoUrl, flashSale }: { menus?: any
         {/* Logo */}
         <Link href="/" className="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 z-50">
           {logoUrl ? (
-            <img src={logoUrl} alt="Store Logo" className="h-8 md:h-10 object-contain" />
+            <img src={logoUrl} alt="Store Logo" className="h-9 md:h-12 w-auto max-w-[180px] md:max-w-[240px] object-contain" />
           ) : (
             <div className="h-10 w-32 bg-gray-200 rounded flex items-center justify-center text-xs text-gray-500 font-sans tracking-normal">No Logo</div>
           )}

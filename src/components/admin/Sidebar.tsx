@@ -110,9 +110,9 @@ export default function Sidebar({ onClose, logoUrl }: SidebarProps) {
             <Image 
               src={logoUrl || "/logo.png"} 
               alt="Logo" 
-              width={150} 
-              height={40} 
-              className="h-12 w-auto object-contain brightness-0 invert" 
+              width={180} 
+              height={52} 
+              className="h-12 md:h-14 w-auto max-w-[200px] object-contain" 
               unoptimized
             />
           </Link>
