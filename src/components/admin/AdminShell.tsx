@@ -61,7 +61,15 @@ export default function AdminShell({ children, logoUrl, storeName = 'Ruporong' }
                 <p className="text-[11px] text-gray-500">Super Admin</p>
               </div>
               <button 
-                onClick={() => signOut({ callbackUrl: '/admin/login' })}
+                onClick={async () => {
+                  try {
+                    await signOut({ redirect: false });
+                  } catch (e) {
+                    console.error('Logout error:', e);
+                  } finally {
+                    window.location.href = '/admin/login';
+                  }
+                }}
                 title="Logout"
                 className="ml-2 p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-md transition-colors"
               >

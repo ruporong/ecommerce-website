@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import Link from 'next/link';
 
 import connectToDatabase from '@/lib/mongodb';
@@ -12,7 +13,7 @@ export default async function AuthLayout({ children }: { children: React.ReactNo
   const nameSetting = await Setting.findOne({ key: 'store_name' });
   const storeName = nameSetting?.value || 'Ruporong';
   const rawBanners = await Banner.find({ status: 'active', type: 'auth' }).sort({ order: 1 }).lean();
-  const banners = JSON.parse(JSON.stringify(rawBanners));
+  const banners = JSON.parse(JSON.stringify(rawBanners || []));
   return (
     <div className="min-h-screen flex w-full bg-white">
       {/* Left Form Side */}
@@ -33,8 +34,8 @@ export default async function AuthLayout({ children }: { children: React.ReactNo
       </div>
 
       {/* Right Image Side */}
-      <div className="hidden lg:block lg:w-1/2 relative overflow-hidden bg-gray-50">
-        <AuthSliderClient banners={banners} />
+      <div className="hidden lg:block lg:w-1/2 relative overflow-hidden bg-gray-950">
+        <AuthSliderClient banners={banners} storeName={storeName} />
       </div>
     </div>
   );

@@ -45,6 +45,32 @@ export const getAuthOptions = async () => {
   return {
     providers,
     callbacks: {
+      async redirect({ url, baseUrl }: { url: string; baseUrl: string }) {
+        let effectiveBase = baseUrl;
+        if (effectiveBase.includes('localhost') && process.env.NEXTAUTH_URL && !process.env.NEXTAUTH_URL.includes('localhost')) {
+          effectiveBase = process.env.NEXTAUTH_URL;
+        }
+
+        // Relative URL
+        if (url.startsWith('/')) {
+          return `${effectiveBase}${url}`;
+        }
+
+        // Absolute URL
+        try {
+          const parsedUrl = new URL(url);
+          const parsedBase = new URL(effectiveBase);
+          if (parsedUrl.origin === parsedBase.origin) {
+            return url;
+          }
+          if (parsedUrl.hostname === 'localhost' || parsedUrl.hostname === '127.0.0.1') {
+            return `${effectiveBase}${parsedUrl.pathname}${parsedUrl.search}`;
+          }
+          return url;
+        } catch {
+          return effectiveBase;
+        }
+      },
       async signIn({ user, account, profile }: any) {
         if (account?.provider === 'google') {
           await connectToDatabase();
