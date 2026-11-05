@@ -1,6 +1,7 @@
 import connectToDatabase from '@/lib/mongodb';
 import Menu from '@/models/Menu';
 import Setting from '@/models/Setting';
+import Category from '@/models/Category';
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import QuickViewModal from "@/components/QuickViewModal";
@@ -24,12 +25,25 @@ export default async function StoreLayout({
   const headerMenus = JSON.parse(JSON.stringify(rawHeaderMenus));
   const footerMenus = JSON.parse(JSON.stringify(rawFooterMenus));
 
+  // Fetch active Categories for dynamic navigation
+  let categories: any[] = [];
+  try {
+    const rawCategories = await Category.find({ is_active: true }).sort({ createdAt: 1 }).lean();
+    categories = JSON.parse(JSON.stringify(rawCategories));
+  } catch (err) {
+    console.error('Failed to fetch categories for StoreLayout:', err);
+  }
+
   const rawFlashSale = await FlashSale.findOne({ is_active: true }).lean();
   const flashSale = rawFlashSale ? JSON.parse(JSON.stringify(rawFlashSale)) : null;
 
   // Fetch Social Links
   const setting = await Setting.findOne({ key: 'social_links' }).lean();
   const socialLinks = setting?.value ? JSON.parse(setting.value) : [];
+
+  // Fetch Store Name
+  const storeNameSetting = await Setting.findOne({ key: 'store_name' }).lean();
+  const storeName = storeNameSetting?.value || 'Ruporong';
 
   // Fetch Logos
   const logoLightSetting = await Setting.findOne({ key: 'logo_url' }).lean();
@@ -66,11 +80,11 @@ export default async function StoreLayout({
         .text-warm-white { color: var(--color-warm-white) !important; }
       `}} />
       
-      <Header menus={headerMenus} logoUrl={logoDark} flashSale={flashSale} />
+      <Header menus={headerMenus} categories={categories} logoUrl={logoDark} flashSale={flashSale} />
 
       {children}
 
-      <Footer menus={footerMenus} socialLinks={socialLinks} logoUrl={logoLight} />
+      <Footer menus={footerMenus} categories={categories} socialLinks={socialLinks} logoUrl={logoLight} storeName={storeName} />
       <QuickViewModal />
       <CartDrawer />
       <WebChat />

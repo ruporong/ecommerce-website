@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import NewsletterForm from './NewsletterForm';
 
 function getSocialIcon(platform: string) {
@@ -61,10 +62,27 @@ function getSocialIcon(platform: string) {
   );
 }
 
-export default function Footer({ menus = [], socialLinks = [], logoUrl, storeName = 'Store' }: { menus?: any[], socialLinks?: any[], logoUrl?: string | null, storeName?: string }) {
+export default function Footer({ 
+  menus = [], 
+  categories = [], 
+  socialLinks = [], 
+  logoUrl, 
+  storeName = 'Ruporong' 
+}: { 
+  menus?: any[], 
+  categories?: any[], 
+  socialLinks?: any[], 
+  logoUrl?: string | null, 
+  storeName?: string 
+}) {
   const col1 = menus.filter(m => m.column === 1);
   const col2 = menus.filter(m => m.column === 2);
   const col3 = menus.filter(m => m.column === 3);
+
+  // Dynamic category list for footer fallback
+  const displayCategories = categories && categories.length > 0 
+    ? categories.slice(0, 5) 
+    : [];
 
   return (
     <footer className="bg-charcoal text-warm-white pt-20 pb-10 px-4 md:px-8">
@@ -99,48 +117,55 @@ export default function Footer({ menus = [], socialLinks = [], logoUrl, storeNam
           )}
         </div>
         
-        {/* Column 1 */}
+        {/* Column 1 - Company / Categories */}
         <div>
           <h4 className="text-[10px] tracking-widest uppercase mb-6 text-warm-white/50">Company</h4>
           <ul className="space-y-3 text-sm">
             {col1.length > 0 ? col1.map((m, idx) => (
-              <li key={idx}><a href={m.link} className="hover:text-dusty-rose transition-colors">{m.name}</a></li>
-            )) : (
+              <li key={idx}><Link href={m.link} className="hover:text-dusty-rose transition-colors">{m.name}</Link></li>
+            )) : displayCategories.length > 0 ? (
               <>
-                <li><a href="#" className="hover:text-dusty-rose transition-colors">New Arrivals</a></li>
-                <li><a href="#" className="hover:text-dusty-rose transition-colors">Dresses</a></li>
-                <li><a href="#" className="hover:text-dusty-rose transition-colors">Sale</a></li>
+                <li><Link href="/shop" className="hover:text-dusty-rose transition-colors">All Products</Link></li>
+                {displayCategories.map((c: any) => (
+                  <li key={c._id}><Link href={`/category/${c.slug}`} className="hover:text-dusty-rose transition-colors">{c.name}</Link></li>
+                ))}
+              </>
+            ) : (
+              <>
+                <li><Link href="/shop" className="hover:text-dusty-rose transition-colors">New Arrivals</Link></li>
+                <li><Link href="/shop" className="hover:text-dusty-rose transition-colors">Collections</Link></li>
+                <li><Link href="/contact" className="hover:text-dusty-rose transition-colors">Contact</Link></li>
               </>
             )}
           </ul>
         </div>
         
-        {/* Column 2 */}
+        {/* Column 2 - Help & Customer Care */}
         <div>
           <h4 className="text-[10px] tracking-widest uppercase mb-6 text-warm-white/50">Help</h4>
           <ul className="space-y-3 text-sm">
             {col2.length > 0 ? col2.map((m, idx) => (
-              <li key={idx}><a href={m.link} className="hover:text-dusty-rose transition-colors">{m.name}</a></li>
+              <li key={idx}><Link href={m.link} className="hover:text-dusty-rose transition-colors">{m.name}</Link></li>
             )) : (
               <>
-                <li><a href="#" className="hover:text-dusty-rose transition-colors">Size Guide</a></li>
-                <li><a href="#" className="hover:text-dusty-rose transition-colors">Shipping & Returns</a></li>
-                <li><a href="#" className="hover:text-dusty-rose transition-colors">Contact Us</a></li>
+                <li><Link href="/contact" className="hover:text-dusty-rose transition-colors">Contact Us</Link></li>
+                <li><Link href="/terms-of-service#shipping" className="hover:text-dusty-rose transition-colors">Shipping & Delivery</Link></li>
+                <li><Link href="/terms-of-service#returns" className="hover:text-dusty-rose transition-colors">Returns & Refunds</Link></li>
               </>
             )}
           </ul>
         </div>
         
-        {/* Column 3 */}
+        {/* Column 3 - Legal */}
         <div>
           <h4 className="text-[10px] tracking-widest uppercase mb-6 text-warm-white/50">Legal</h4>
           <ul className="space-y-3 text-sm">
             {col3.length > 0 ? col3.map((m, idx) => (
-              <li key={idx}><a href={m.link} className="hover:text-dusty-rose transition-colors">{m.name}</a></li>
+              <li key={idx}><Link href={m.link} className="hover:text-dusty-rose transition-colors">{m.name}</Link></li>
             )) : (
               <>
-                <li><a href="#" className="hover:text-dusty-rose transition-colors">Terms of Service</a></li>
-                <li><a href="#" className="hover:text-dusty-rose transition-colors">Privacy Policy</a></li>
+                <li><Link href="/terms-of-service" className="hover:text-dusty-rose transition-colors">Terms of Service</Link></li>
+                <li><Link href="/privacy-policy" className="hover:text-dusty-rose transition-colors">Privacy Policy</Link></li>
               </>
             )}
           </ul>

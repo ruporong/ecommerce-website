@@ -8,7 +8,17 @@ import { useSession } from 'next-auth/react';
 import HeaderSearch from '@/components/HeaderSearch';
 import FlashSaleBanner from '@/components/FlashSaleBanner';
 
-export default function Header({ menus = [], logoUrl, flashSale }: { menus?: any[], logoUrl?: string | null, flashSale?: any }) {
+export default function Header({ 
+  menus = [], 
+  categories = [], 
+  logoUrl, 
+  flashSale 
+}: { 
+  menus?: any[], 
+  categories?: any[], 
+  logoUrl?: string | null, 
+  flashSale?: any 
+}) {
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -31,13 +41,35 @@ export default function Header({ menus = [], logoUrl, flashSale }: { menus?: any
     return null;
   }
 
-  // Fallback static menu if empty
-  const navLinks = menus.length > 0 ? [...menus] : [
-    { name: 'New In', link: '/shop' },
-    { name: 'Dresses', link: '/category/dresses' },
-    { name: 'Sale', link: '/category/sale' }
-  ];
-  if (!navLinks.find(m => m.name.toLowerCase() === 'contact')) {
+  // Dynamic Category Links from Database
+  const categoryLinks = (categories || []).map((cat: any) => ({
+    name: cat.name,
+    link: `/category/${cat.slug}`,
+  }));
+
+  // Build Navigation Links: Dynamic Categories + Custom Menus
+  let navLinks: { name: string; link: string }[] = [];
+
+  if (categoryLinks.length > 0) {
+    navLinks = [...categoryLinks];
+    // If admin has configured custom header menus that aren't duplicate categories, merge them
+    if (menus && menus.length > 0) {
+      menus.forEach((m: any) => {
+        if (!navLinks.some(nl => nl.link === m.link || nl.name.toLowerCase() === m.name.toLowerCase())) {
+          navLinks.push({ name: m.name, link: m.link });
+        }
+      });
+    }
+  } else if (menus && menus.length > 0) {
+    navLinks = [...menus];
+  } else {
+    navLinks = [
+      { name: 'Shop', link: '/shop' }
+    ];
+  }
+
+  // Ensure Contact link exists if not already present
+  if (!navLinks.some(m => m.name.toLowerCase() === 'contact' || m.link === '/contact')) {
     navLinks.push({ name: 'Contact', link: '/contact' });
   }
 
@@ -69,13 +101,24 @@ export default function Header({ menus = [], logoUrl, flashSale }: { menus?: any
           )}
         </Link>
 
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex gap-8 lg:gap-10">
-          {navLinks.map((menu, idx) => (
-            <Link key={idx} href={menu.link} className={`text-sm tracking-[0.2em] uppercase hover:text-gray-500 transition-colors ${menu.name.toLowerCase() === 'sale' ? 'text-red-800' : ''}`}>
-              {menu.name}
-            </Link>
-          ))}
+        {/* Desktop Nav with dynamic category links */}
+        <nav className="hidden md:flex items-center gap-5 lg:gap-7 max-w-[62%] overflow-x-auto scrollbar-none py-1">
+          {navLinks.map((menu, idx) => {
+            const isActive = pathname === menu.link;
+            return (
+              <Link 
+                key={idx} 
+                href={menu.link} 
+                className={`text-xs lg:text-[13px] tracking-[0.16em] uppercase whitespace-nowrap transition-colors duration-200 ${
+                  isActive 
+                    ? 'text-charcoal font-bold border-b-2 border-charcoal pb-0.5' 
+                    : 'text-charcoal/80 font-medium hover:text-charcoal hover:border-b-2 hover:border-charcoal/30 pb-0.5'
+                } ${menu.name.toLowerCase() === 'sale' ? 'text-red-700 font-bold' : ''}`}
+              >
+                {menu.name}
+              </Link>
+            );
+          })}
         </nav>
 
         {/* Right Actions */}

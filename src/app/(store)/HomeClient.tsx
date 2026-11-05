@@ -100,19 +100,19 @@ export default function HomeClient({ banners, sections, categories = [], product
             )}
           </div>
           
-          <div className="flex items-center gap-3 sm:gap-4 md:gap-6 overflow-x-auto pb-4 pt-1 scrollbar-none justify-start">
+          <div className="flex items-center gap-4 sm:gap-5 md:gap-6 overflow-x-auto pb-4 pt-1 scrollbar-none justify-start">
             {categories.map((cat: any) => (
               <Link 
                 key={cat._id} 
                 href={`/category/${cat.slug}`} 
-                className="group relative block w-36 sm:w-44 md:w-60 lg:w-72 flex-shrink-0 rounded-2xl md:rounded-[20px] overflow-hidden bg-gray-100 shadow-sm hover:shadow-xl transition-all duration-500 cursor-pointer"
+                className="group relative block w-64 sm:w-72 md:w-80 lg:w-96 flex-shrink-0 rounded-2xl md:rounded-[20px] overflow-hidden bg-gray-100 shadow-sm hover:shadow-xl transition-all duration-500 cursor-pointer"
               >
-                <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl md:rounded-[20px]">
+                <div className="relative aspect-[3/2] w-full overflow-hidden rounded-2xl md:rounded-[20px]">
                   {cat.image ? (
                     <img 
                       src={cat.image} 
                       alt={cat.name} 
-                      className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out rounded-2xl md:rounded-[20px]" 
+                      className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out rounded-2xl md:rounded-[20px]" 
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-gray-200 text-gray-400 font-serif text-base md:text-2xl rounded-2xl md:rounded-[20px]">
@@ -120,21 +120,21 @@ export default function HomeClient({ banners, sections, categories = [], product
                     </div>
                   )}
                   
-                  {/* Gradient Overlay for luxury feel and readable text */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent transition-opacity group-hover:from-black/90 rounded-2xl md:rounded-[20px]"></div>
+                  {/* High contrast gradient overlay for razor-sharp readability on any banner */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 via-50% to-transparent transition-opacity group-hover:from-black rounded-2xl md:rounded-[20px]"></div>
                   
-                  {/* Category Details at bottom */}
-                  <div className="absolute bottom-0 inset-x-0 p-3 sm:p-4 md:p-6 text-white flex flex-col justify-end">
-                    <span className="text-[9px] sm:text-[10px] md:text-[11px] tracking-[0.2em] uppercase text-white/80 font-medium mb-0.5 md:mb-1">
+                  {/* Category Details at bottom with strong contrast */}
+                  <div className="absolute bottom-0 inset-x-0 p-3.5 sm:p-4 md:p-5 text-white flex flex-col justify-end z-10">
+                    <span className="text-[10px] sm:text-[11px] tracking-[0.25em] uppercase text-amber-300 font-bold mb-1 drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
                       Collection
                     </span>
-                    <h3 className="font-serif text-sm sm:text-lg md:text-2xl font-normal tracking-wide text-white group-hover:translate-x-1 transition-transform duration-300 truncate">
+                    <h3 className="font-serif text-base sm:text-xl md:text-2xl font-bold tracking-wide text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] group-hover:text-amber-200 transition-colors truncate">
                       {cat.name}
                     </h3>
-                    <div className="mt-1.5 md:mt-3 flex items-center gap-1.5 md:gap-2 text-[10px] sm:text-xs uppercase tracking-widest text-white/90 font-medium group-hover:text-warm-white transition-colors">
+                    <div className="mt-1.5 sm:mt-2.5 flex items-center gap-1.5 text-xs sm:text-sm uppercase tracking-widest text-white/95 font-semibold group-hover:text-amber-300 transition-colors drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
                       <span>Explore</span>
-                      <svg className="w-3 h-3 md:w-4 md:h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                      <svg className="w-3.5 h-3.5 group-hover:translate-x-1.5 transition-transform" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                       </svg>
                     </div>
                   </div>
