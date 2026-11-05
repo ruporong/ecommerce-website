@@ -14,7 +14,7 @@ import AuthProvider from '@/components/AuthProvider';
 export const dynamic = 'force-dynamic';
 
 export async function generateMetadata(): Promise<Metadata> {
-  let faviconUrl = '/favicon.ico';
+  let faviconUrl = '/icon.png';
   let storeName = 'Ruporong';
   let googleVerificationCode = '';
 
@@ -42,7 +42,12 @@ export async function generateMetadata(): Promise<Metadata> {
     title: storeName,
     description: "Discover the latest in premium women's fashion. Shop dresses, sarees, abayas, and more at " + storeName + ".",
     icons: {
-      icon: faviconUrl,
+      icon: [
+        { url: faviconUrl },
+        { url: '/icon.png' },
+      ],
+      shortcut: [faviconUrl],
+      apple: [faviconUrl],
     },
     verification: {
       google: googleVerificationCode || undefined,
@@ -57,9 +62,12 @@ export default async function RootLayout({
 }>) {
   let firebaseConfigStr = '';
   let vapidKeyStr = '';
+  let faviconUrl = '/icon.png';
 
   try {
     await connectToDatabase();
+    const faviconSetting = await Setting.findOne({ key: 'favicon_url' }).lean();
+    if (faviconSetting?.value) faviconUrl = faviconSetting.value;
     const firebaseConfigSetting = await Setting.findOne({ key: 'firebase_client_config' }).lean();
     const vapidKeySetting = await Setting.findOne({ key: 'firebase_vapid_key' }).lean();
     firebaseConfigStr = firebaseConfigSetting?.value || '';
@@ -70,6 +78,11 @@ export default async function RootLayout({
   
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href={faviconUrl} sizes="any" />
+        <link rel="shortcut icon" href={faviconUrl} />
+        <link rel="apple-touch-icon" href={faviconUrl} />
+      </head>
       <body className="font-sans text-charcoal bg-warm-white no-scrollbar">
         <AuthProvider>
         {children}
