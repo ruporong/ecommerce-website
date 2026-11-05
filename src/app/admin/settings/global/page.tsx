@@ -21,6 +21,8 @@ export default async function Page() {
         { name: 'site_url', label: 'Website URL (Domain)', placeholder: 'https://www.ruporong.com', hint: 'Used for sitemap.xml, robots.txt, and SEO metadata.' },
         { name: 'store_email', label: 'Support Email', type: 'text', placeholder: 'e.g. support@store.com' },
         { name: 'store_phone', label: 'Support Phone', placeholder: 'e.g. +880 1700 000000' },
+        { name: 'whatsapp_number', label: 'WhatsApp Order Number', placeholder: 'e.g. +8801341667396', hint: 'Used for direct WhatsApp order button on product details.' },
+        { name: 'messenger_url', label: 'Facebook Messenger Link / Username', placeholder: 'e.g. https://m.me/ruporongg or ruporongg', hint: 'Used for direct Messenger order button on product details.' },
         { name: 'timezone', label: 'Timezone', type: 'select', options: [
             { label: 'Asia/Dhaka (GMT+6)', value: 'Asia/Dhaka' },
             { label: 'Asia/Kolkata (GMT+5:30)', value: 'Asia/Kolkata' },

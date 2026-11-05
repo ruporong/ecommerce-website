@@ -4,6 +4,7 @@ import Category from '@/models/Category';
 import Attribute from '@/models/Attribute';
 import SizeChart from '@/models/SizeChart';
 import Review from '@/models/Review';
+import Setting from '@/models/Setting';
 import { notFound } from 'next/navigation';
 import ProductDetailsClient from './ProductDetailsClient';
 
@@ -16,7 +17,7 @@ export default async function ProductDetail({ params }: Props) {
   
   await connectToDatabase();
   
-  Category; Attribute; SizeChart; Review; // Prevent tree-shaking
+  Category; Attribute; SizeChart; Review; Setting; // Prevent tree-shaking
   
   const product = await Product.findOne({ slug, is_active: true })
     .populate('colors')
@@ -59,6 +60,12 @@ export default async function ProductDetail({ params }: Props) {
     productData.totalReviews = 0;
   }
 
+  // Fetch store settings for WhatsApp & Messenger
+  const settingsRaw = await Setting.find({
+    key: { $in: ['store_phone', 'whatsapp_number', 'messenger_url', 'social_links', 'site_url'] }
+  }).lean();
+  const settings = settingsRaw.reduce((acc: any, s: any) => ({ ...acc, [s.key]: s.value }), {});
+
   // Fetch related products (same category, exclude current)
   const relatedDbProducts = await Product.find({ 
     category_id: product.category_id?._id, 
@@ -73,5 +80,5 @@ export default async function ProductDetail({ params }: Props) {
   
   const relatedProducts = JSON.parse(JSON.stringify(relatedDbProducts));
 
-  return <ProductDetailsClient product={productData} relatedProducts={relatedProducts} />;
+  return <ProductDetailsClient product={productData} relatedProducts={relatedProducts} settings={settings} />;
 }

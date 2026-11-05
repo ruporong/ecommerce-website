@@ -34,81 +34,93 @@ export default function ContactClient() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="relative group">
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div>
+          <label htmlFor="name" className="block text-xs font-bold tracking-wider uppercase text-gray-700 mb-2">
+            Full Name <span className="text-red-500">*</span>
+          </label>
           <input 
             required 
             type="text" 
             id="name"
             value={formData.name}
             onChange={(e) => setFormData({...formData, name: e.target.value})}
-            className="block w-full px-0 py-3 bg-transparent border-0 border-b-2 border-gray-200 text-gray-900 focus:ring-0 focus:border-charcoal peer transition-colors"
-            placeholder=" "
+            className="w-full bg-gray-50/80 border border-gray-300 rounded-xl px-4 py-3.5 text-sm text-gray-900 placeholder:text-gray-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all shadow-xs"
+            placeholder="e.g. Ayesha Rahman"
           />
-          <label htmlFor="name" className="absolute text-xs tracking-widest uppercase text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-charcoal peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-            Name
-          </label>
         </div>
         
-        <div className="relative group">
+        <div>
+          <label htmlFor="email" className="block text-xs font-bold tracking-wider uppercase text-gray-700 mb-2">
+            Email Address <span className="text-red-500">*</span>
+          </label>
           <input 
             required 
             type="email" 
             id="email"
             value={formData.email}
             onChange={(e) => setFormData({...formData, email: e.target.value})}
-            className="block w-full px-0 py-3 bg-transparent border-0 border-b-2 border-gray-200 text-gray-900 focus:ring-0 focus:border-charcoal peer transition-colors"
-            placeholder=" "
+            className="w-full bg-gray-50/80 border border-gray-300 rounded-xl px-4 py-3.5 text-sm text-gray-900 placeholder:text-gray-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all shadow-xs"
+            placeholder="e.g. ayesha@example.com"
           />
-          <label htmlFor="email" className="absolute text-xs tracking-widest uppercase text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-charcoal peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-            Email
-          </label>
         </div>
       </div>
 
-      <div className="relative group">
+      <div>
+        <label htmlFor="subject" className="block text-xs font-bold tracking-wider uppercase text-gray-700 mb-2">
+          Subject <span className="text-red-500">*</span>
+        </label>
         <input 
           required 
           type="text" 
           id="subject"
           value={formData.subject}
           onChange={(e) => setFormData({...formData, subject: e.target.value})}
-          className="block w-full px-0 py-3 bg-transparent border-0 border-b-2 border-gray-200 text-gray-900 focus:ring-0 focus:border-charcoal peer transition-colors"
-          placeholder=" "
+          className="w-full bg-gray-50/80 border border-gray-300 rounded-xl px-4 py-3.5 text-sm text-gray-900 placeholder:text-gray-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all shadow-xs"
+          placeholder="e.g. Inquiry regarding order #1024"
         />
-        <label htmlFor="subject" className="absolute text-xs tracking-widest uppercase text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-charcoal peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-          Subject
-        </label>
       </div>
 
-      <div className="relative group mt-10">
+      <div>
+        <label htmlFor="message" className="block text-xs font-bold tracking-wider uppercase text-gray-700 mb-2">
+          Your Message <span className="text-red-500">*</span>
+        </label>
         <textarea 
           required 
           id="message"
-          rows={4}
+          rows={5}
           value={formData.message}
           onChange={(e) => setFormData({...formData, message: e.target.value})}
-          className="block w-full px-0 py-3 bg-transparent border-0 border-b-2 border-gray-200 text-gray-900 focus:ring-0 focus:border-charcoal peer transition-colors resize-none"
-          placeholder=" "
+          className="w-full bg-gray-50/80 border border-gray-300 rounded-xl px-4 py-3.5 text-sm text-gray-900 placeholder:text-gray-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all shadow-xs resize-none"
+          placeholder="Write your message or inquiry here..."
         />
-        <label htmlFor="message" className="absolute text-xs tracking-widest uppercase text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-charcoal peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-          Message
-        </label>
       </div>
 
-      <button 
-        disabled={isSubmitting}
-        type="submit"
-        className="mt-8 px-10 py-4 bg-charcoal text-white text-xs tracking-[0.2em] uppercase font-medium hover:bg-black transition-colors disabled:opacity-50 inline-flex items-center gap-3"
-      >
-        {isSubmitting ? 'Sending...' : 'Send Message'}
-        {!isSubmitting && (
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-          </svg>
-        )}
-      </button>
+      <div className="pt-2">
+        <button 
+          disabled={isSubmitting}
+          type="submit"
+          className="w-full sm:w-auto min-w-[220px] px-8 py-4 bg-black text-white text-xs tracking-[0.2em] uppercase font-bold rounded-xl hover:bg-neutral-800 transition-all shadow-md flex items-center justify-center gap-3 cursor-pointer disabled:opacity-50"
+        >
+          {isSubmitting ? (
+            <>
+              <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+              </svg>
+              <span>Sending...</span>
+            </>
+          ) : (
+            <>
+              <span>Send Message</span>
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </>
+          )}
+        </button>
+      </div>
     </form>
   );
 }

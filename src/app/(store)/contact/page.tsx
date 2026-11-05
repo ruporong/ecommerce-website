@@ -38,57 +38,53 @@ export default async function ContactPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 bg-white shadow-2xl shadow-gray-200/40 rounded-2xl overflow-hidden">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 bg-white shadow-2xl shadow-gray-200/50 rounded-2xl overflow-hidden border border-gray-100">
           
           {/* LEFT SIDE: Info */}
-          <div className="lg:col-span-5 bg-charcoal text-white p-10 md:p-16 flex flex-col justify-between relative overflow-hidden">
-            {/* Decorative background shape */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
-            <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full blur-3xl translate-y-1/3 -translate-x-1/3"></div>
-
+          <div className="lg:col-span-5 bg-neutral-900 text-white p-8 md:p-12 lg:p-16 flex flex-col justify-between relative overflow-hidden">
             <div className="relative z-10">
-              <h2 className="text-3xl font-serif mb-6 text-warm-white">Get in touch</h2>
-              <p className="text-gray-400 mb-12 text-sm leading-relaxed">
-                Fill out the form and our dedicated team will get back to you within 24 business hours.
+              <h2 className="text-3xl font-serif mb-4 text-white">Get in touch</h2>
+              <p className="text-gray-400 mb-10 text-sm leading-relaxed">
+                Fill out the form and our dedicated client advisors will get back to you within 24 business hours.
               </p>
 
-              <div className="space-y-10">
-                <div className="flex items-start gap-5">
-                  <div className="bg-white/10 p-3 rounded-full shrink-0">
-                    <svg className="w-5 h-5 text-dusty-rose" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="space-y-8">
+                <div className="flex items-start gap-4">
+                  <div className="bg-white/10 p-3 rounded-xl shrink-0 text-white">
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
                     </svg>
                   </div>
                   <div>
-                    <h3 className="text-xs tracking-widest uppercase text-gray-400 mb-1.5">Office</h3>
-                    <p className="text-warm-white text-sm leading-relaxed whitespace-pre-line">{address}</p>
+                    <h3 className="text-xs tracking-widest uppercase text-gray-400 mb-1 font-semibold">Office</h3>
+                    <p className="text-white text-sm leading-relaxed whitespace-pre-line">{address}</p>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-5">
-                  <div className="bg-white/10 p-3 rounded-full shrink-0">
-                    <svg className="w-5 h-5 text-dusty-rose" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="flex items-start gap-4">
+                  <div className="bg-white/10 p-3 rounded-xl shrink-0 text-white">
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
                     </svg>
                   </div>
                   <div>
-                    <h3 className="text-xs tracking-widest uppercase text-gray-400 mb-1.5">Email</h3>
-                    <a href={`mailto:${email}`} className="text-warm-white text-sm hover:text-dusty-rose transition-colors break-all">
+                    <h3 className="text-xs tracking-widest uppercase text-gray-400 mb-1 font-semibold">Email</h3>
+                    <a href={`mailto:${email}`} className="text-white text-sm hover:underline transition-colors break-all">
                       {email}
                     </a>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-5">
-                  <div className="bg-white/10 p-3 rounded-full shrink-0">
-                    <svg className="w-5 h-5 text-dusty-rose" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="flex items-start gap-4">
+                  <div className="bg-white/10 p-3 rounded-xl shrink-0 text-white">
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-2.896-1.596-5.436-4.136-7.032-7.032l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
                     </svg>
                   </div>
                   <div>
-                    <h3 className="text-xs tracking-widest uppercase text-gray-400 mb-1.5">Phone</h3>
-                    <a href={`tel:${telLink}`} className="text-warm-white text-sm hover:text-dusty-rose transition-colors">
+                    <h3 className="text-xs tracking-widest uppercase text-gray-400 mb-1 font-semibold">Phone</h3>
+                    <a href={`tel:${telLink}`} className="text-white text-sm hover:underline transition-colors">
                       {phone}
                     </a>
                   </div>
@@ -98,8 +94,8 @@ export default async function ContactPage() {
           </div>
 
           {/* RIGHT SIDE: Form */}
-          <div className="lg:col-span-7 p-10 md:p-16">
-            <h3 className="text-2xl font-serif text-charcoal mb-8">Send a Message</h3>
+          <div className="lg:col-span-7 p-8 md:p-12 lg:p-16 bg-white">
+            <h3 className="text-2xl md:text-3xl font-serif text-charcoal mb-8">Send a Message</h3>
             <ContactClient />
           </div>
 

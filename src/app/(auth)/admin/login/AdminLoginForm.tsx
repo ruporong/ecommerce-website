@@ -30,8 +30,7 @@ export default function AdminLoginForm() {
       toast.error('Invalid admin credentials');
     } else {
       toast.success('Welcome back, Admin!');
-      router.push('/admin');
-      router.refresh();
+      window.location.href = '/admin';
     }
   };
 
