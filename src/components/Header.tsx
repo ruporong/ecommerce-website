@@ -115,14 +115,14 @@ export default function Header({
           </div>
 
           {/* CENTER: Desktop Navigation Menu */}
-          <nav className="hidden lg:flex items-center justify-center gap-5 xl:gap-8 flex-1 py-1">
+          <nav className="hidden lg:flex items-center justify-center gap-5 xl:gap-7 flex-1 py-1">
             {desktopNavLinks.map((menu, idx) => {
               const isActive = pathname === menu.link;
               return (
                 <Link 
                   key={idx} 
                   href={menu.link} 
-                  className={`text-xs xl:text-[13px] tracking-[0.18em] uppercase whitespace-nowrap transition-colors duration-200 ${
+                  className={`text-[14px] xl:text-[15px] tracking-[0.14em] uppercase whitespace-nowrap transition-colors duration-200 ${
                     isActive 
                       ? 'text-black font-extrabold border-b-2 border-black pb-0.5' 
                       : 'text-black/85 font-bold hover:text-black hover:border-b-2 hover:border-black/50 pb-0.5'
@@ -135,75 +135,78 @@ export default function Header({
           </nav>
 
           {/* RIGHT: Actions */}
-          <div className="flex items-center gap-3 sm:gap-4 md:gap-5 shrink-0 justify-end">
+          <div className="flex items-center gap-4 sm:gap-6 md:gap-8 shrink-0 justify-end">
             
             {/* Desktop Search Bar (md and above) */}
             <div className="hidden md:flex items-center">
-              <HeaderSearch className="w-36 md:w-44 lg:w-56 xl:w-64" />
+              <HeaderSearch className="w-36 md:w-44 lg:w-52 xl:w-60" />
             </div>
 
-            {/* Account Icon (always visible on desktop, tablet, and mobile) */}
-            <Link 
-              href={accountLink} 
-              aria-label="Account" 
-              title={session?.user ? "Account" : "Login"}
-              className="flex items-center text-charcoal hover:opacity-70 transition-opacity"
-            >
-              {session?.user ? (
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
-                  <path fillRule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clipRule="evenodd" />
+            {/* Action Icons Group */}
+            <div className="flex items-center gap-3.5 sm:gap-4 md:gap-5 shrink-0">
+              {/* Account Icon (always visible on desktop, tablet, and mobile) */}
+              <Link 
+                href={accountLink} 
+                aria-label="Account" 
+                title={session?.user ? "Account" : "Login"}
+                className="flex items-center text-charcoal hover:opacity-70 transition-opacity"
+              >
+                {session?.user ? (
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                    <path fillRule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clipRule="evenodd" />
+                  </svg>
+                ) : (
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                  </svg>
+                )}
+              </Link>
+
+              {/* Mobile Search Button Toggle (below md) */}
+              <button 
+                type="button"
+                aria-label="Search" 
+                onClick={() => {
+                  setMobileSearchOpen(!mobileSearchOpen);
+                  if (mobileMenuOpen) setMobileMenuOpen(false);
+                }}
+                className="md:hidden hover:opacity-70 transition-opacity text-charcoal"
+              >
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              </button>
+
+              {/* Wishlist Icon */}
+              <button 
+                type="button"
+                onClick={() => useWishlistStore.getState().openDrawer()} 
+                aria-label="Wishlist" 
+                title="Wishlist"
+                className="relative hover:opacity-70 transition-opacity"
+              >
+                <svg width="22" height="22" viewBox="0 0 24 24" fill={mounted && totalWishlist > 0 ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
                 </svg>
-              ) : (
+                {mounted && totalWishlist > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">
+                    {totalWishlist}
+                  </span>
+                )}
+              </button>
+              
+              {/* Cart Icon */}
+              <button onClick={() => useCartStore.getState().openDrawer()} className="relative hover:opacity-70 transition-opacity group">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <path d="M16 10a4 4 0 0 1-8 0"></path>
                 </svg>
-              )}
-            </Link>
-
-            {/* Mobile Search Button Toggle (below md) */}
-            <button 
-              type="button"
-              aria-label="Search" 
-              onClick={() => {
-                setMobileSearchOpen(!mobileSearchOpen);
-                if (mobileMenuOpen) setMobileMenuOpen(false);
-              }}
-              className="md:hidden hover:opacity-70 transition-opacity text-charcoal"
-            >
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            </button>
-
-            {/* Wishlist Icon */}
-            <button 
-              type="button"
-              onClick={() => useWishlistStore.getState().openDrawer()} 
-              aria-label="Wishlist" 
-              title="Wishlist"
-              className="relative hover:opacity-70 transition-opacity"
-            >
-              <svg width="22" height="22" viewBox="0 0 24 24" fill={mounted && totalWishlist > 0 ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
-              </svg>
-              {mounted && totalWishlist > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">
-                  {totalWishlist}
-                </span>
-              )}
-            </button>
-            
-            {/* Cart Icon */}
-            <button onClick={() => useCartStore.getState().openDrawer()} className="relative hover:opacity-70 transition-opacity group">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                <line x1="3" y1="6" x2="21" y2="6"></line>
-                <path d="M16 10a4 4 0 0 1-8 0"></path>
-              </svg>
-              {mounted && totalItems > 0 && (
-                <span className="absolute -top-2 -right-2 bg-charcoal text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">
-                  {totalItems}
-                </span>
-              )}
-            </button>
+                {mounted && totalItems > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-charcoal text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">
+                    {totalItems}
+                  </span>
+                )}
+              </button>
+            </div>
           </div>
         </div>
       </div>

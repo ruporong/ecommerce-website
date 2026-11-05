@@ -46,7 +46,8 @@ export default function ContactClient() {
             id="name"
             value={formData.name}
             onChange={(e) => setFormData({...formData, name: e.target.value})}
-            className="w-full bg-gray-50/80 border border-gray-300 rounded-xl px-4 py-3.5 text-sm text-gray-900 placeholder:text-gray-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all shadow-xs"
+            style={{ backgroundColor: '#ffffff', color: '#111111', border: '1.5px solid #d1d5db' }}
+            className="w-full bg-white rounded-lg px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:border-black focus:outline-none transition-all shadow-xs"
             placeholder="e.g. Ayesha Rahman"
           />
         </div>
@@ -61,7 +62,8 @@ export default function ContactClient() {
             id="email"
             value={formData.email}
             onChange={(e) => setFormData({...formData, email: e.target.value})}
-            className="w-full bg-gray-50/80 border border-gray-300 rounded-xl px-4 py-3.5 text-sm text-gray-900 placeholder:text-gray-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all shadow-xs"
+            style={{ backgroundColor: '#ffffff', color: '#111111', border: '1.5px solid #d1d5db' }}
+            className="w-full bg-white rounded-lg px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:border-black focus:outline-none transition-all shadow-xs"
             placeholder="e.g. ayesha@example.com"
           />
         </div>
@@ -77,7 +79,8 @@ export default function ContactClient() {
           id="subject"
           value={formData.subject}
           onChange={(e) => setFormData({...formData, subject: e.target.value})}
-          className="w-full bg-gray-50/80 border border-gray-300 rounded-xl px-4 py-3.5 text-sm text-gray-900 placeholder:text-gray-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all shadow-xs"
+          style={{ backgroundColor: '#ffffff', color: '#111111', border: '1.5px solid #d1d5db' }}
+          className="w-full bg-white rounded-lg px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:border-black focus:outline-none transition-all shadow-xs"
           placeholder="e.g. Inquiry regarding order #1024"
         />
       </div>
@@ -92,7 +95,8 @@ export default function ContactClient() {
           rows={5}
           value={formData.message}
           onChange={(e) => setFormData({...formData, message: e.target.value})}
-          className="w-full bg-gray-50/80 border border-gray-300 rounded-xl px-4 py-3.5 text-sm text-gray-900 placeholder:text-gray-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all shadow-xs resize-none"
+          style={{ backgroundColor: '#ffffff', color: '#111111', border: '1.5px solid #d1d5db' }}
+          className="w-full bg-white rounded-lg px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:border-black focus:outline-none transition-all shadow-xs resize-none"
           placeholder="Write your message or inquiry here..."
         />
       </div>
@@ -101,6 +105,7 @@ export default function ContactClient() {
         <button 
           disabled={isSubmitting}
           type="submit"
+          style={{ backgroundColor: '#000000', color: '#ffffff' }}
           className="w-full sm:w-auto min-w-[220px] px-8 py-4 bg-black text-white text-xs tracking-[0.2em] uppercase font-bold rounded-xl hover:bg-neutral-800 transition-all shadow-md flex items-center justify-center gap-3 cursor-pointer disabled:opacity-50"
         >
           {isSubmitting ? (
@@ -109,12 +114,12 @@ export default function ContactClient() {
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
               </svg>
-              <span>Sending...</span>
+              <span style={{ color: '#ffffff' }}>Sending...</span>
             </>
           ) : (
             <>
-              <span>Send Message</span>
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <span style={{ color: '#ffffff' }}>Send Message</span>
+              <svg style={{ color: '#ffffff' }} className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
               </svg>
             </>

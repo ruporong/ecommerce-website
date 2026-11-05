@@ -64,6 +64,19 @@ export default function WebChat() {
         #web-chat-toggle:hover {
             transform: scale(1.05);
         }
+
+        @media (max-width: 768px) {
+            #web-chat-toggle {
+                bottom: 76px !important;
+                right: 16px !important;
+            }
+            #web-chat-window {
+                bottom: 142px !important;
+                right: 16px !important;
+                width: calc(100vw - 32px) !important;
+                max-width: 360px !important;
+            }
+        }
         
         #web-chat-window {
             position: fixed;
