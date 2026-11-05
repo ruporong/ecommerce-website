@@ -156,7 +156,7 @@ export default function ProductCard({ product }: { product: any }) {
       
       <div className="flex justify-between items-start px-1 gap-2">
         <div className="min-w-0 flex-1">
-          <h3 className="font-serif text-base sm:text-lg mb-1 text-charcoal group-hover:text-black transition-colors truncate">
+          <h3 className="text-[16px] font-[700] mb-0.5 text-charcoal group-hover:text-black transition-colors truncate">
             <Link href={`/product/${product.slug}`} className="hover:text-black">{product.name}</Link>
           </h3>
           <p className="text-xs text-gray-500 tracking-widest uppercase truncate">{product.category}</p>
@@ -164,11 +164,11 @@ export default function ProductCard({ product }: { product: any }) {
         <div className="text-right shrink-0">
           {hasDiscount ? (
             <div className="flex items-baseline gap-1.5 justify-end">
-              <span className="font-serif text-base sm:text-lg font-semibold text-charcoal">৳{effectivePrice}</span>
-              <span className="text-xs text-gray-400 line-through">৳{product.price}</span>
+              <span className="text-[16px] font-[700] text-charcoal">৳{effectivePrice}</span>
+              <span className="text-xs text-gray-400 line-through font-normal">৳{product.price}</span>
             </div>
           ) : (
-            <span className="font-serif text-base sm:text-lg font-medium text-charcoal">৳{product.price}</span>
+            <span className="text-[16px] font-[700] text-charcoal">৳{product.price}</span>
           )}
         </div>
       </div>
