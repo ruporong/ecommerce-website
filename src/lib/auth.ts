@@ -22,13 +22,20 @@ export const getAuthOptions = async () => {
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
         await connectToDatabase();
-        const user = await User.findOne({ email: credentials.email }).select('+password');
+        const email = credentials.email.toString().toLowerCase().trim();
+        const user = await User.findOne({ email }).select('+password');
         if (!user || !user.password) return null;
         
         const isMatch = await bcrypt.compare(credentials.password, user.password);
         if (!isMatch) return null;
         
-        return { id: user._id.toString(), name: user.name, email: user.email, role: user.role, image: user.image };
+        return { 
+          id: user._id.toString(), 
+          name: user.name, 
+          email: user.email, 
+          role: user.role || 'customer', 
+          image: user.image 
+        };
       }
     })
   ];
@@ -112,7 +119,7 @@ export const getAuthOptions = async () => {
     session: {
       strategy: 'jwt' as const
     },
-    secret: process.env.NEXTAUTH_SECRET || 'secret123',
+    secret: process.env.NEXTAUTH_SECRET || 'd3d3ZWNvbWJ1aWxkYml6',
     debug: process.env.NODE_ENV === 'development'
   };
 };

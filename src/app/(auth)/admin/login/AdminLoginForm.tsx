@@ -2,11 +2,9 @@
 
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 
 export default function AdminLoginForm() {
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -15,22 +13,29 @@ export default function AdminLoginForm() {
     setLoading(true);
     
     const formData = new FormData(e.currentTarget);
-    const email = formData.get('email');
-    const password = formData.get('password');
+    const email = (formData.get('email') as string)?.trim().toLowerCase();
+    const password = formData.get('password') as string;
 
-    const res = await signIn('credentials', {
-      redirect: false,
-      email,
-      password,
-    });
+    try {
+      const res = await signIn('credentials', {
+        redirect: false,
+        callbackUrl: '/admin',
+        email,
+        password,
+      });
 
-    setLoading(false);
+      if (res?.error) {
+        setLoading(false);
+        toast.error('Invalid admin credentials. Please check email and password.');
+        return;
+      }
 
-    if (res?.error) {
-      toast.error('Invalid admin credentials');
-    } else {
       toast.success('Welcome back, Admin!');
-      window.location.href = '/admin';
+      // Force navigation to admin dashboard
+      window.location.replace('/admin');
+    } catch (err: any) {
+      setLoading(false);
+      toast.error('Authentication error. Please try again.');
     }
   };
 
@@ -42,6 +47,7 @@ export default function AdminLoginForm() {
             name="email" 
             type="email" 
             required 
+            autoComplete="email"
             className="w-full bg-white border border-gray-300 shadow-sm rounded-xl py-3.5 px-4 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-black transition-all" 
             placeholder="Admin Email" 
           />
@@ -51,6 +57,7 @@ export default function AdminLoginForm() {
             name="password" 
             type={showPassword ? 'text' : 'password'} 
             required 
+            autoComplete="current-password"
             className="w-full bg-white border border-gray-300 shadow-sm rounded-xl py-3.5 px-4 pr-10 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-black transition-all" 
             placeholder="Admin Password" 
           />
