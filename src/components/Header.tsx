@@ -76,6 +76,13 @@ export default function Header({
     navLinks.push({ name: 'Contact', link: '/contact' });
   }
 
+  // Desktop Navigation: reduced by 3 items (top 3 categories + Contact)
+  const contactLink = navLinks.find(m => m.name.toLowerCase() === 'contact' || m.link === '/contact') || { name: 'Contact', link: '/contact' };
+  const nonContactLinks = navLinks.filter(m => m.name.toLowerCase() !== 'contact' && m.link !== '/contact');
+  const desktopNavLinks = nonContactLinks.length > 3 
+    ? [...nonContactLinks.slice(0, 3), contactLink]
+    : navLinks;
+
   return (
     <header className="sticky top-0 w-full z-40">
       {flashSale && <FlashSaleBanner data={flashSale} />}
@@ -104,19 +111,19 @@ export default function Header({
           )}
         </Link>
 
-        {/* Desktop Nav with dynamic category links */}
-        <nav className="hidden md:flex items-center gap-5 lg:gap-7 max-w-[62%] overflow-x-auto scrollbar-none py-1">
-          {navLinks.map((menu, idx) => {
+        {/* Desktop Nav with higher font weight and reduced items */}
+        <nav className="hidden md:flex items-center gap-7 lg:gap-10 max-w-[62%] py-1">
+          {desktopNavLinks.map((menu, idx) => {
             const isActive = pathname === menu.link;
             return (
               <Link 
                 key={idx} 
                 href={menu.link} 
-                className={`text-xs lg:text-[13px] tracking-[0.16em] uppercase whitespace-nowrap transition-colors duration-200 ${
+                className={`text-xs lg:text-[13px] tracking-[0.2em] uppercase whitespace-nowrap transition-colors duration-200 ${
                   isActive 
-                    ? 'text-charcoal font-bold border-b-2 border-charcoal pb-0.5' 
-                    : 'text-charcoal/80 font-medium hover:text-charcoal hover:border-b-2 hover:border-charcoal/30 pb-0.5'
-                } ${menu.name.toLowerCase() === 'sale' ? 'text-red-700 font-bold' : ''}`}
+                    ? 'text-black font-extrabold border-b-2 border-black pb-0.5' 
+                    : 'text-black/90 font-bold hover:text-black hover:border-b-2 hover:border-black/50 pb-0.5'
+                } ${menu.name.toLowerCase() === 'sale' ? 'text-red-700 font-extrabold' : ''}`}
               >
                 {menu.name}
               </Link>

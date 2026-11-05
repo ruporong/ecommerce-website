@@ -1,12 +1,23 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import ProductCard from '@/components/ProductCard';
 import PlaceholderImage from '@/components/PlaceholderImage';
 
 export default function HomeClient({ banners, sections, categories = [], products }: { banners: any[], sections: any[], categories?: any[], products?: any[] }) {
   const [activeSlide, setActiveSlide] = useState(0);
+  const categorySliderRef = useRef<HTMLDivElement>(null);
+
+  const scrollCategory = (direction: 'left' | 'right') => {
+    if (categorySliderRef.current) {
+      const scrollAmount = categorySliderRef.current.clientWidth * 0.75;
+      categorySliderRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+  };
   
   // Use dynamic banners or fallback to static if none
   const slides = banners && banners.length > 0 
@@ -85,7 +96,7 @@ export default function HomeClient({ banners, sections, categories = [], product
         </div>
       </section>
 
-      {/* Categories Section */}
+      {/* Categories Section with Slider & Dark Opacity Text Card */}
       {categories && categories.length > 0 && (
         <section className="py-8 md:py-16 px-4 md:px-8 max-w-[1920px] mx-auto border-b border-gray-100">
           <div className="flex items-end justify-between mb-5 md:mb-8">
@@ -93,19 +104,37 @@ export default function HomeClient({ banners, sections, categories = [], product
               <span className="text-[11px] tracking-[0.2em] uppercase text-gray-400 font-medium block mb-1">Collections</span>
               <h2 className="font-serif text-xl sm:text-2xl md:text-4xl text-charcoal">Shop by Category</h2>
             </div>
-            {categories.length > 4 && (
-              <span className="text-xs text-gray-400 uppercase tracking-widest hidden sm:inline-block">
-                {categories.length} Categories
-              </span>
-            )}
+            
+            {/* Category Slider Controls */}
+            <div className="flex items-center gap-2">
+              <button 
+                type="button"
+                onClick={() => scrollCategory('left')}
+                aria-label="Previous category"
+                className="w-9 h-9 md:w-11 md:h-11 rounded-full border border-gray-300 bg-white shadow-sm flex items-center justify-center hover:bg-black hover:text-white transition-all text-charcoal"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6"/></svg>
+              </button>
+              <button 
+                type="button"
+                onClick={() => scrollCategory('right')}
+                aria-label="Next category"
+                className="w-9 h-9 md:w-11 md:h-11 rounded-full border border-gray-300 bg-white shadow-sm flex items-center justify-center hover:bg-black hover:text-white transition-all text-charcoal"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6"/></svg>
+              </button>
+            </div>
           </div>
           
-          <div className="flex items-center gap-4 sm:gap-5 md:gap-6 overflow-x-auto pb-4 pt-1 scrollbar-none justify-start">
+          <div 
+            ref={categorySliderRef}
+            className="flex items-center gap-4 sm:gap-5 md:gap-6 overflow-x-auto pb-4 pt-1 scrollbar-none justify-start scroll-smooth snap-x snap-mandatory"
+          >
             {categories.map((cat: any) => (
               <Link 
                 key={cat._id} 
                 href={`/category/${cat.slug}`} 
-                className="group relative block w-64 sm:w-72 md:w-80 lg:w-96 flex-shrink-0 rounded-2xl md:rounded-[20px] overflow-hidden bg-gray-100 shadow-sm hover:shadow-xl transition-all duration-500 cursor-pointer"
+                className="group relative block w-64 sm:w-72 md:w-80 lg:w-96 flex-shrink-0 snap-start rounded-2xl md:rounded-[20px] overflow-hidden bg-gray-100 shadow-sm hover:shadow-xl transition-all duration-500 cursor-pointer"
               >
                 <div className="relative aspect-[3/2] w-full overflow-hidden rounded-2xl md:rounded-[20px]">
                   {cat.image ? (
@@ -120,22 +149,26 @@ export default function HomeClient({ banners, sections, categories = [], product
                     </div>
                   )}
                   
-                  {/* High contrast gradient overlay for razor-sharp readability on any banner */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 via-50% to-transparent transition-opacity group-hover:from-black rounded-2xl md:rounded-[20px]"></div>
+                  {/* Subtle overall scrim to avoid top blowout */}
+                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/5 transition-colors rounded-2xl md:rounded-[20px]"></div>
                   
-                  {/* Category Details at bottom with strong contrast */}
-                  <div className="absolute bottom-0 inset-x-0 p-3.5 sm:p-4 md:p-5 text-white flex flex-col justify-end z-10">
-                    <span className="text-[10px] sm:text-[11px] tracking-[0.25em] uppercase text-amber-300 font-bold mb-1 drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
-                      Collection
-                    </span>
-                    <h3 className="font-serif text-base sm:text-xl md:text-2xl font-bold tracking-wide text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] group-hover:text-amber-200 transition-colors truncate">
-                      {cat.name}
-                    </h3>
-                    <div className="mt-1.5 sm:mt-2.5 flex items-center gap-1.5 text-xs sm:text-sm uppercase tracking-widest text-white/95 font-semibold group-hover:text-amber-300 transition-colors drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
-                      <span>Explore</span>
-                      <svg className="w-3.5 h-3.5 group-hover:translate-x-1.5 transition-transform" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-                      </svg>
+                  {/* Dedicated High-Contrast Text Card with Black Opacity & Shadow */}
+                  <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 p-3.5 sm:p-4 bg-black/75 backdrop-blur-md rounded-xl md:rounded-2xl border border-white/15 shadow-[0_8px_30px_rgb(0,0,0,0.5)] text-white z-10 transition-all duration-300 group-hover:bg-black/90">
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="min-w-0 flex-1">
+                        <span className="text-[10px] tracking-[0.25em] uppercase text-amber-300 font-bold block mb-0.5">
+                          Collection
+                        </span>
+                        <h3 className="font-serif text-sm sm:text-base md:text-lg font-bold text-white tracking-wide truncate">
+                          {cat.name}
+                        </h3>
+                      </div>
+                      <div className="shrink-0 flex items-center gap-1.5 text-[11px] sm:text-xs uppercase tracking-widest text-white font-semibold group-hover:text-amber-300 transition-colors bg-white/10 px-3 py-1.5 rounded-lg border border-white/15">
+                        <span>Explore</span>
+                        <svg className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                        </svg>
+                      </div>
                     </div>
                   </div>
                 </div>
