@@ -86,21 +86,21 @@ export default async function StoreLayout({
           .landing-product-grid {
             display: grid !important;
             grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
-            gap: 16px !important;
+            gap: 20px !important;
           }
         }
         @media (min-width: 600px) and (max-width: 899px) {
           .landing-product-grid {
             display: grid !important;
             grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-            gap: 12px !important;
+            gap: 16px !important;
           }
         }
         @media (max-width: 599px) {
           .landing-product-grid {
             display: grid !important;
             grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-            gap: 10px !important;
+            gap: 12px !important;
           }
         }
       `}} />

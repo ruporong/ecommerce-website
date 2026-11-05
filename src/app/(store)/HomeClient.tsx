@@ -187,7 +187,7 @@ export default function HomeClient({ banners, sections, categories = [], product
           </div>
           
           {section.resolvedProducts && section.resolvedProducts.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-6 landing-product-grid gap-2 sm:gap-3 md:gap-4 lg:gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-6 landing-product-grid gap-3 sm:gap-4 md:gap-5 lg:gap-5">
               {section.resolvedProducts.map((product: any) => (
                 <ProductCard key={product._id} product={product} />
               ))}

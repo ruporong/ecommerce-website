@@ -67,7 +67,7 @@ export default function ProductCard({ product }: { product: any }) {
   return (
     <div className="group block relative">
       <Link href={`/product/${product.slug}`} className="block">
-        <div className="relative aspect-[4/5] overflow-hidden bg-gray-100 rounded-2xl mb-4">
+        <div className="relative aspect-[4/5] overflow-hidden bg-gray-100 rounded-md mb-3">
           {mainImage ? (
             <img 
               src={mainImage} 
@@ -138,10 +138,10 @@ export default function ProductCard({ product }: { product: any }) {
           </div>
 
           {/* Quick Add to Bag Button */}
-          <div className="absolute bottom-0 left-0 right-0 p-3.5 translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 z-30">
+          <div className="absolute bottom-0 left-0 right-0 p-3 translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 z-30">
             <button 
               type="button"
-              className="w-full py-3 px-4 text-xs tracking-widest uppercase font-bold border border-gray-300/80 shadow-xl rounded-xl transition-all duration-200 flex items-center justify-center gap-2"
+              className="w-full py-2.5 px-3.5 text-xs tracking-widest uppercase font-bold border border-gray-300/80 shadow-xl rounded-md transition-all duration-200 flex items-center justify-center gap-2"
               style={{ backgroundColor: '#ffffff', color: '#111111' }}
               onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#000000'; e.currentTarget.style.color = '#ffffff'; }}
               onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#ffffff'; e.currentTarget.style.color = '#111111'; }}
@@ -154,21 +154,21 @@ export default function ProductCard({ product }: { product: any }) {
         </div>
       </Link>
       
-      <div className="flex justify-between items-start px-1 gap-2">
+      <div className="flex justify-between items-start px-0.5 gap-2">
         <div className="min-w-0 flex-1">
-          <h3 className="text-[16px] font-[700] mb-0.5 text-charcoal group-hover:text-black transition-colors truncate">
+          <h3 className="text-[18px] font-[700] leading-snug mb-0.5 text-charcoal group-hover:text-black transition-colors truncate">
             <Link href={`/product/${product.slug}`} className="hover:text-black">{product.name}</Link>
           </h3>
-          <p className="text-xs text-gray-500 tracking-widest uppercase truncate">{product.category}</p>
+          <p className="text-xs text-gray-500 tracking-wider uppercase truncate">{product.category}</p>
         </div>
         <div className="text-right shrink-0">
           {hasDiscount ? (
             <div className="flex items-baseline gap-1.5 justify-end">
-              <span className="text-[16px] font-[700] text-charcoal">৳{effectivePrice}</span>
+              <span className="text-[18px] font-[700] text-charcoal">৳{effectivePrice}</span>
               <span className="text-xs text-gray-400 line-through font-normal">৳{product.price}</span>
             </div>
           ) : (
-            <span className="text-[16px] font-[700] text-charcoal">৳{product.price}</span>
+            <span className="text-[18px] font-[700] text-charcoal">৳{product.price}</span>
           )}
         </div>
       </div>
