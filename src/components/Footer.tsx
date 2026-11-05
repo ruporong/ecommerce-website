@@ -89,9 +89,11 @@ export default function Footer({
       <div className="max-w-[1920px] mx-auto grid grid-cols-1 md:grid-cols-5 gap-12 border-b border-white/10 pb-16">
         <div className="md:col-span-2">
           {logoUrl ? (
-            <img src={logoUrl} alt="Store Logo" className="h-10 object-contain mb-6" />
+            <div className="inline-flex items-center bg-white px-4 py-2.5 rounded-xl mb-6 shadow-sm">
+              <img src={logoUrl} alt="Store Logo" className="h-10 sm:h-12 md:h-14 w-auto max-w-[220px] md:max-w-[260px] object-contain" />
+            </div>
           ) : (
-            <div className="h-10 w-32 bg-gray-800 rounded flex items-center justify-center text-xs text-gray-500 font-sans tracking-normal mb-6">No Logo</div>
+            <div className="h-12 w-36 bg-gray-800 rounded flex items-center justify-center text-xs text-gray-500 font-sans tracking-normal mb-6">No Logo</div>
           )}
           <p className="text-warm-white/70 max-w-sm mb-8 text-sm">Elevating women's fashion through modern design, premium fabrics, and timeless silhouettes.</p>
           <div className="max-w-md">
@@ -171,7 +173,7 @@ export default function Footer({
           </ul>
         </div>
       </div>
-      <div className="max-w-[1920px] mx-auto flex flex-col sm:flex-row justify-between items-center mt-8 text-xs text-warm-white/60 gap-3 border-t border-white/5 pt-6">
+      <div className="max-w-[1920px] mx-auto flex flex-col sm:flex-row justify-between items-center pt-8 text-xs text-warm-white/60 gap-3">
         <p>&copy; {new Date().getFullYear()} {storeName}. All rights reserved.</p>
         <p className="flex items-center gap-1.5 text-warm-white/60">
           <span>Design and develop by</span>

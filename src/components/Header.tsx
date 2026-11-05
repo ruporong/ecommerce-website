@@ -87,7 +87,7 @@ export default function Header({
     <header className="sticky top-0 w-full z-40 bg-white shadow-sm">
       {flashSale && <FlashSaleBanner data={flashSale} />}
       <div className="w-full bg-white border-b border-gray-200/80">
-        <div className="max-w-[1920px] mx-auto px-3 sm:px-4 md:px-8 h-16 sm:h-20 flex items-center justify-between gap-2 sm:gap-4">
+        <div className="max-w-[1920px] mx-auto px-3 sm:px-4 md:px-8 h-18 sm:h-20 md:h-24 flex items-center justify-between gap-3 sm:gap-6">
         
           {/* LEFT: Logo & Mobile Hamburger */}
           <div className="flex items-center gap-2.5 sm:gap-4 shrink-0">
@@ -105,17 +105,17 @@ export default function Header({
               <span className={`w-6 h-0.5 bg-charcoal transition-transform duration-300 ${mobileMenuOpen ? '-rotate-45 -translate-y-2' : ''}`}></span>
             </button>
 
-            <Link href="/" className="shrink-0 flex items-center">
+            <Link href="/" className="shrink-0 flex items-center py-2">
               {logoUrl ? (
-                <img src={logoUrl} alt="Store Logo" className="h-8 sm:h-9 md:h-12 w-auto max-w-[130px] sm:max-w-[170px] md:max-w-[220px] object-contain" />
+                <img src={logoUrl} alt="Store Logo" className="h-10 sm:h-12 md:h-14 lg:h-16 w-auto max-w-[160px] sm:max-w-[210px] md:max-w-[270px] lg:max-w-[300px] object-contain" />
               ) : (
-                <div className="h-9 sm:h-10 w-28 sm:w-32 bg-gray-200 rounded flex items-center justify-center text-xs text-gray-500 font-sans tracking-normal">No Logo</div>
+                <div className="h-10 sm:h-12 w-32 sm:w-36 bg-gray-200 rounded flex items-center justify-center text-xs text-gray-500 font-sans tracking-normal">No Logo</div>
               )}
             </Link>
           </div>
 
           {/* CENTER: Desktop Navigation Menu */}
-          <nav className="hidden lg:flex items-center justify-center gap-6 xl:gap-9 flex-1 py-1">
+          <nav className="hidden lg:flex items-center justify-center gap-5 xl:gap-8 flex-1 py-1">
             {desktopNavLinks.map((menu, idx) => {
               const isActive = pathname === menu.link;
               return (
@@ -135,27 +135,32 @@ export default function Header({
           </nav>
 
           {/* RIGHT: Actions */}
-          <div className="flex items-center gap-2 sm:gap-4 md:gap-5 shrink-0 justify-end">
+          <div className="flex items-center gap-3 sm:gap-4 md:gap-5 shrink-0 justify-end">
             
-            {/* Desktop Search Bar (xl and above) */}
-            <div className="hidden xl:flex items-center">
-              <HeaderSearch className="w-48 xl:w-60" />
+            {/* Desktop Search Bar (md and above) */}
+            <div className="hidden md:flex items-center">
+              <HeaderSearch className="w-36 md:w-44 lg:w-56 xl:w-64" />
             </div>
 
-            {/* Account Icon (hidden on mobile, present in mobile bottom bar) */}
-            <Link href={accountLink} aria-label="Account" className="hidden sm:flex hover:opacity-70 transition-opacity">
+            {/* Account Icon (always visible on desktop, tablet, and mobile) */}
+            <Link 
+              href={accountLink} 
+              aria-label="Account" 
+              title={session?.user ? "Account" : "Login"}
+              className="flex items-center text-charcoal hover:opacity-70 transition-opacity"
+            >
               {session?.user ? (
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
                   <path fillRule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clipRule="evenodd" />
                 </svg>
               ) : (
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
                 </svg>
               )}
             </Link>
 
-            {/* Search Button Toggle (below xl) */}
+            {/* Mobile Search Button Toggle (below md) */}
             <button 
               type="button"
               aria-label="Search" 
@@ -163,9 +168,9 @@ export default function Header({
                 setMobileSearchOpen(!mobileSearchOpen);
                 if (mobileMenuOpen) setMobileMenuOpen(false);
               }}
-              className="xl:hidden hover:opacity-70 transition-opacity"
+              className="md:hidden hover:opacity-70 transition-opacity text-charcoal"
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
             </button>
 
             {/* Wishlist Icon */}
@@ -203,9 +208,9 @@ export default function Header({
         </div>
       </div>
 
-      {/* Expandable Search Bar (below xl) */}
+      {/* Expandable Search Bar (below md) */}
       {mobileSearchOpen && (
-        <div className="xl:hidden px-4 py-3 bg-white border-t border-gray-200">
+        <div className="md:hidden px-4 py-3 bg-white border-t border-gray-200">
           <HeaderSearch 
             placeholder="Search products..." 
             onSearchSubmit={() => setMobileSearchOpen(false)} 
