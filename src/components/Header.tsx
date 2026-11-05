@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useCartStore } from '@/store/useCartStore';
+import { useWishlistStore } from '@/store/useWishlistStore';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
@@ -27,6 +28,8 @@ export default function Header({
   const accountLink = session?.user ? '/user/dashboard' : '/user/login';
   const items = useCartStore((state) => state.items);
   const totalItems = items.reduce((total, item) => total + Number(item.quantity), 0);
+  const wishlistItems = useWishlistStore((state) => state.items);
+  const totalWishlist = wishlistItems.length;
 
   useEffect(() => {
     setMounted(true);
@@ -154,6 +157,24 @@ export default function Header({
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
           </button>
+
+          {/* Wishlist Icon */}
+          <button 
+            type="button"
+            onClick={() => useWishlistStore.getState().openDrawer()} 
+            aria-label="Wishlist" 
+            title="Wishlist"
+            className="relative hover:opacity-70 transition-opacity"
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill={mounted && totalWishlist > 0 ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+            </svg>
+            {mounted && totalWishlist > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">
+                {totalWishlist}
+              </span>
+            )}
+          </button>
           
           {/* Cart Icon */}
           <button onClick={() => useCartStore.getState().openDrawer()} className="relative hover:opacity-70 transition-opacity group">
@@ -200,6 +221,17 @@ export default function Header({
            ))}
            
            <div className="pt-4 border-t border-gray-200 flex flex-col gap-4">
+             <button 
+               type="button"
+               onClick={() => { setMobileMenuOpen(false); useWishlistStore.getState().openDrawer(); }} 
+               className="flex items-center gap-3 text-base tracking-[0.1em] uppercase text-gray-500 hover:text-charcoal transition-colors text-left"
+             >
+               <svg width="18" height="18" viewBox="0 0 24 24" fill={mounted && totalWishlist > 0 ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.5">
+                 <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+               </svg>
+               <span>Wishlist {mounted && totalWishlist > 0 ? `(${totalWishlist})` : ''}</span>
+             </button>
+
              <Link href={accountLink} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 text-base tracking-[0.1em] uppercase text-gray-500 hover:text-charcoal transition-colors">
                {session?.user ? (
                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">

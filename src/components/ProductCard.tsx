@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useCartStore } from '@/store/useCartStore';
 import { useQuickViewStore } from '@/store/useQuickViewStore';
+import { useWishlistStore } from '@/store/useWishlistStore';
 import toast from 'react-hot-toast';
 import PlaceholderImage from '@/components/PlaceholderImage';
 
@@ -10,6 +11,8 @@ export default function ProductCard({ product }: { product: any }) {
   const addItem = useCartStore((state) => state.addItem);
   const openDrawer = useCartStore((state) => state.openDrawer);
   const openQuickView = useQuickViewStore((state) => state.openQuickView);
+  const toggleWishlist = useWishlistStore((state) => state.toggleWishlist);
+  const isInWishlist = useWishlistStore((state) => state.isInWishlist(product._id || product.slug));
 
   // Determine images
   const mainImage = product.mainImages?.[0] || product.images?.[0] || '';
@@ -49,7 +52,16 @@ export default function ProductCard({ product }: { product: any }) {
   const handleWishlist = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    toast.success('Added to Wishlist');
+    toggleWishlist({
+      id: product._id || product.slug,
+      name: product.name,
+      slug: product.slug,
+      price: Number(product.price),
+      discount_price: product.discount_price ? Number(product.discount_price) : undefined,
+      image: mainImage,
+      category: product.category,
+      stock: product.stock,
+    });
   };
 
   return (
@@ -111,14 +123,17 @@ export default function ProductCard({ product }: { product: any }) {
             </button>
             <button 
               type="button"
-              className="w-9 h-9 rounded-full flex items-center justify-center border border-gray-200/90 shadow-md transition-all duration-200" 
-              style={{ backgroundColor: '#ffffff', color: '#111111' }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#000000'; e.currentTarget.style.color = '#ffffff'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#ffffff'; e.currentTarget.style.color = '#111111'; }}
-              title="Add to Wishlist" 
+              className={`w-9 h-9 rounded-full flex items-center justify-center border shadow-md transition-all duration-200 ${
+                isInWishlist 
+                  ? 'bg-red-50 text-red-600 border-red-200' 
+                  : 'bg-white text-[#111111] border-gray-200/90 hover:bg-black hover:text-white'
+              }`}
+              title={isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'} 
               onClick={handleWishlist}
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill={isInWishlist ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
+                <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+              </svg>
             </button>
           </div>
 
@@ -141,14 +156,14 @@ export default function ProductCard({ product }: { product: any }) {
       
       <div className="flex justify-between items-start px-1 gap-2">
         <div className="min-w-0 flex-1">
-          <h3 className="font-serif text-base sm:text-lg mb-1 group-hover:text-dusty-rose transition-colors truncate">
-            <Link href={`/product/${product.slug}`}>{product.name}</Link>
+          <h3 className="font-serif text-base sm:text-lg mb-1 text-charcoal group-hover:text-black transition-colors truncate">
+            <Link href={`/product/${product.slug}`} className="hover:text-black">{product.name}</Link>
           </h3>
           <p className="text-xs text-gray-500 tracking-widest uppercase truncate">{product.category}</p>
         </div>
         <div className="text-right shrink-0">
           {hasDiscount ? (
-            <div className="flex flex-col items-end">
+            <div className="flex items-baseline gap-1.5 justify-end">
               <span className="font-serif text-base sm:text-lg font-semibold text-charcoal">৳{effectivePrice}</span>
               <span className="text-xs text-gray-400 line-through">৳{product.price}</span>
             </div>

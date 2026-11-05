@@ -6,6 +6,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import QuickViewModal from "@/components/QuickViewModal";
 import CartDrawer from "@/components/CartDrawer";
+import WishlistDrawer from "@/components/WishlistDrawer";
 import WebChat from "@/components/WebChat";
 import CartSyncListener from "@/components/CartSyncListener";
 import FlashSale from "@/models/FlashSale";
@@ -87,6 +88,7 @@ export default async function StoreLayout({
       <Footer menus={footerMenus} categories={categories} socialLinks={socialLinks} logoUrl={logoLight} storeName={storeName} />
       <QuickViewModal />
       <CartDrawer />
+      <WishlistDrawer />
       <WebChat />
       <CartSyncListener />
 
