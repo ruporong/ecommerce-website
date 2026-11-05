@@ -5,7 +5,7 @@ export default function Loading() {
       <section className="relative w-full h-[85vh] min-h-[600px] bg-gray-200"></section>
 
       {/* Shop by Category Skeleton */}
-      <section className="py-20 md:py-32 px-4 md:px-8 max-w-[1920px] mx-auto">
+      <section className="py-12 px-4 md:px-8 max-w-[1920px] mx-auto">
         <div className="text-center mb-16 flex flex-col items-center">
           <div className="h-8 md:h-12 w-64 md:w-96 bg-gray-200 rounded mb-4"></div>
           <div className="h-5 w-48 bg-gray-200 rounded"></div>
@@ -21,7 +21,7 @@ export default function Loading() {
       </section>
 
       {/* New Arrivals Skeleton */}
-      <section className="py-20 md:py-32 px-4 md:px-8 max-w-[1920px] mx-auto bg-white border-y border-gray-100">
+      <section className="py-12 px-4 md:px-8 max-w-[1920px] mx-auto bg-white border-y border-gray-100">
         <div className="flex justify-between items-end mb-12">
           <div className="flex flex-col">
             <div className="h-8 md:h-12 w-48 md:w-64 bg-gray-200 rounded mb-4"></div>

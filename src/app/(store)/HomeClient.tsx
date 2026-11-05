@@ -98,7 +98,7 @@ export default function HomeClient({ banners, sections, categories = [], product
 
       {/* Categories Section with Slider & Dark Opacity Text Card */}
       {categories && categories.length > 0 && (
-        <section className="py-8 md:py-16 px-4 md:px-8 max-w-[1920px] mx-auto border-b border-gray-100">
+        <section className="py-12 px-4 md:px-8 max-w-[1920px] mx-auto border-b border-gray-100">
           <div className="flex items-end justify-between mb-5 md:mb-8">
             <div>
               <span className="text-[11px] tracking-[0.2em] uppercase text-gray-400 font-medium block mb-1">Collections</span>
@@ -176,7 +176,7 @@ export default function HomeClient({ banners, sections, categories = [], product
 
       {/* Dynamic Sections */}
       {sections && sections.map((section, idx) => (
-        <section key={section._id || idx} className={`py-16 md:py-24 px-4 md:px-8 max-w-[1920px] mx-auto ${idx % 2 === 1 ? 'bg-gray-50/70' : ''}`}>
+        <section key={section._id || idx} className={`py-12 px-4 md:px-8 max-w-[1920px] mx-auto ${idx % 2 === 1 ? 'bg-gray-50/70' : ''}`}>
           <div className="mb-8 md:mb-12">
             <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl mb-2 text-charcoal">{section.title}</h2>
             <p className="text-gray-500 font-serif italic capitalize text-sm md:text-base">{section.type.replace('_', ' ')} Collection.</p>
