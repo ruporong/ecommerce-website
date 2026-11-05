@@ -149,19 +149,26 @@ export default function HomeClient({ banners, sections, categories = [], product
                     </div>
                   )}
                   
-                  {/* Modern Floating Luxury Capsule */}
-                  <div className="absolute bottom-3 inset-x-3 sm:bottom-3.5 sm:inset-x-3.5 z-10">
-                    <div className="bg-white/95 backdrop-blur-md px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl border border-white/80 shadow-[0_4px_20px_rgba(0,0,0,0.08)] group-hover:shadow-[0_8px_25px_rgba(0,0,0,0.16)] flex items-center justify-between gap-3 transition-all duration-300">
+                  {/* True Glassmorphic Floating Luxury Capsule */}
+                  <div className="absolute bottom-3 inset-x-3 sm:bottom-4 sm:inset-x-4 z-10">
+                    <div 
+                      className="px-4 py-3 sm:py-3.5 rounded-2xl border border-white/70 shadow-[0_8px_32px_0_rgba(0,0,0,0.14)] group-hover:shadow-[0_12px_40px_0_rgba(0,0,0,0.22)] flex items-center justify-between gap-3 transition-all duration-300 group-hover:border-white"
+                      style={{
+                        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.60) 0%, rgba(255, 255, 255, 0.35) 100%)',
+                        backdropFilter: 'blur(16px)',
+                        WebkitBackdropFilter: 'blur(16px)',
+                      }}
+                    >
                       <div className="min-w-0 flex-1">
-                        <span className="block text-[10px] tracking-[0.2em] uppercase font-bold text-gray-400 group-hover:text-charcoal transition-colors">
+                        <span className="block text-[10px] tracking-[0.22em] uppercase font-bold text-black/60 group-hover:text-black transition-colors">
                           Collection
                         </span>
-                        <h3 className="font-serif text-sm sm:text-base font-bold text-gray-900 tracking-wide truncate">
+                        <h3 className="font-serif text-sm sm:text-base md:text-[17px] font-bold text-black tracking-wide truncate">
                           {cat.name}
                         </h3>
                       </div>
-                      <div className="w-8 h-8 rounded-full bg-neutral-900 text-white flex items-center justify-center shrink-0 shadow-sm group-hover:bg-black group-hover:scale-105 transition-all">
-                        <svg className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                      <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/85 text-white flex items-center justify-center shrink-0 shadow-md group-hover:bg-black group-hover:scale-110 transition-all border border-white/30">
+                        <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
                         </svg>
                       </div>

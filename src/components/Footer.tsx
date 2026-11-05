@@ -95,9 +95,9 @@ export default function Footer({
           ) : (
             <div className="h-12 w-36 bg-gray-800 rounded flex items-center justify-center text-xs text-gray-500 font-sans tracking-normal mb-6">No Logo</div>
           )}
-          <p className="text-warm-white/70 max-w-sm mb-8 text-sm">Elevating women's fashion through modern design, premium fabrics, and timeless silhouettes.</p>
+          <p className="text-warm-white/70 max-w-sm mb-8 text-[16px] leading-relaxed">Elevating women's fashion through modern design, premium fabrics, and timeless silhouettes.</p>
           <div className="max-w-md">
-            <p className="text-[10px] tracking-widest uppercase mb-3">Join The Edit</p>
+            <p className="text-xs font-bold tracking-widest uppercase mb-3 text-warm-white/80">Join The Edit</p>
             <NewsletterForm />
           </div>
           {socialLinks.length > 0 && (
@@ -121,8 +121,8 @@ export default function Footer({
         
         {/* Column 1 - Company / Categories */}
         <div>
-          <h4 className="text-[10px] tracking-widest uppercase mb-6 text-warm-white/50">Company</h4>
-          <ul className="space-y-3 text-sm">
+          <h4 className="text-xs font-bold tracking-widest uppercase mb-6 text-warm-white/60">Company</h4>
+          <ul className="space-y-3.5 text-[16px]">
             {col1.length > 0 ? col1.map((m, idx) => (
               <li key={idx}><Link href={m.link} className="hover:text-dusty-rose transition-colors">{m.name}</Link></li>
             )) : displayCategories.length > 0 ? (
@@ -144,8 +144,8 @@ export default function Footer({
         
         {/* Column 2 - Help & Customer Care */}
         <div>
-          <h4 className="text-[10px] tracking-widest uppercase mb-6 text-warm-white/50">Help</h4>
-          <ul className="space-y-3 text-sm">
+          <h4 className="text-xs font-bold tracking-widest uppercase mb-6 text-warm-white/60">Help</h4>
+          <ul className="space-y-3.5 text-[16px]">
             {col2.length > 0 ? col2.map((m, idx) => (
               <li key={idx}><Link href={m.link} className="hover:text-dusty-rose transition-colors">{m.name}</Link></li>
             )) : (
@@ -160,8 +160,8 @@ export default function Footer({
         
         {/* Column 3 - Legal */}
         <div>
-          <h4 className="text-[10px] tracking-widest uppercase mb-6 text-warm-white/50">Legal</h4>
-          <ul className="space-y-3 text-sm">
+          <h4 className="text-xs font-bold tracking-widest uppercase mb-6 text-warm-white/60">Legal</h4>
+          <ul className="space-y-3.5 text-[16px]">
             {col3.length > 0 ? col3.map((m, idx) => (
               <li key={idx}><Link href={m.link} className="hover:text-dusty-rose transition-colors">{m.name}</Link></li>
             )) : (

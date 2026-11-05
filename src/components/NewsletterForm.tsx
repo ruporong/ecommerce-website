@@ -40,12 +40,12 @@ export default function NewsletterForm() {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="Email Address" 
-        className="bg-transparent border-none outline-none w-full text-sm text-warm-white placeholder-warm-white/50" 
+        className="bg-transparent border-none outline-none w-full text-[16px] text-warm-white placeholder-warm-white/50" 
       />
       <button 
         type="submit" 
         disabled={loading}
-        className="text-xs tracking-widest uppercase ml-4 hover:text-dusty-rose transition-colors disabled:opacity-50"
+        className="text-[14px] font-bold tracking-widest uppercase ml-4 hover:text-dusty-rose transition-colors disabled:opacity-50"
       >
         {loading ? '...' : 'Subscribe'}
       </button>
