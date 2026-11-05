@@ -105,6 +105,9 @@ export async function updateBanner(id: string, formData: FormData) {
       order: Number(formData.get('order') || 0),
       status: formData.get('status') || 'active'
     };
+    if (formData.has('type')) {
+      updateData.type = formData.get('type');
+    }
     
     const imageUrl = formData.get('image') as string;
     const imageFile = formData.get('imageFile') as File;

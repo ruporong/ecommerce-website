@@ -10,8 +10,8 @@ export const revalidate = 60; // Revalidate every 60 seconds (ISR)
 export default async function Home() {
   await connectToDatabase();
   
-  // Fetch active banners
-  const bannersRaw = await Banner.find({ status: 'active' }).sort({ order: 1 }).lean();
+  // Fetch active banners for homepage (only home banners, exclude auth slider banners)
+  const bannersRaw = await Banner.find({ status: 'active', type: { $ne: 'auth' } }).sort({ order: 1 }).lean();
   const banners = JSON.parse(JSON.stringify(bannersRaw));
 
   // Fetch categories for homepage
