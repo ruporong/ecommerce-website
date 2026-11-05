@@ -80,6 +80,29 @@ export default async function StoreLayout({
         body { background-color: var(--color-warm-white) !important; color: var(--color-charcoal) !important; }
         .bg-warm-white { background-color: var(--color-warm-white) !important; }
         .text-warm-white { color: var(--color-warm-white) !important; }
+
+        /* Landing Page 6-column product grid */
+        @media (min-width: 900px) {
+          .landing-product-grid {
+            display: grid !important;
+            grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+            gap: 16px !important;
+          }
+        }
+        @media (min-width: 600px) and (max-width: 899px) {
+          .landing-product-grid {
+            display: grid !important;
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+            gap: 12px !important;
+          }
+        }
+        @media (max-width: 599px) {
+          .landing-product-grid {
+            display: grid !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 10px !important;
+          }
+        }
       `}} />
       
       <Header menus={headerMenus} categories={categories} logoUrl={logoDark} flashSale={flashSale} />

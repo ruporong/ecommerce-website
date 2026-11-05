@@ -87,7 +87,7 @@ export default function Header({
     <header className="sticky top-0 w-full z-40 bg-white shadow-sm">
       {flashSale && <FlashSaleBanner data={flashSale} />}
       <div className="w-full bg-white border-b border-gray-200/80">
-        <div className="max-w-[1920px] mx-auto px-3 sm:px-4 md:px-8 h-20 sm:h-24 md:h-28 flex items-center justify-between gap-3 sm:gap-6">
+        <div className="max-w-[1920px] mx-auto px-3 sm:px-4 md:px-8 h-18 sm:h-20 md:h-22 lg:h-24 flex items-center justify-between gap-3 sm:gap-6">
         
           {/* LEFT: Logo & Mobile Hamburger */}
           <div className="flex items-center gap-2.5 sm:gap-4 shrink-0">
@@ -107,9 +107,9 @@ export default function Header({
 
             <Link href="/" className="shrink-0 flex items-center py-2">
               {logoUrl ? (
-                <img src={logoUrl} alt="Store Logo" className="h-12 sm:h-15 md:h-20 lg:h-22 w-auto max-w-[200px] sm:max-w-[280px] md:max-w-[360px] lg:max-w-[420px] object-contain" />
+                <img src={logoUrl} alt="Store Logo" className="h-10 sm:h-12 md:h-16 lg:h-18 w-auto max-w-[180px] sm:max-w-[240px] md:max-w-[300px] lg:max-w-[350px] object-contain" />
               ) : (
-                <div className="h-12 sm:h-14 w-36 sm:w-44 bg-gray-200 rounded flex items-center justify-center text-xs text-gray-500 font-sans tracking-normal">No Logo</div>
+                <div className="h-10 sm:h-12 w-32 sm:w-40 bg-gray-200 rounded flex items-center justify-center text-xs text-gray-500 font-sans tracking-normal">No Logo</div>
               )}
             </Link>
           </div>
