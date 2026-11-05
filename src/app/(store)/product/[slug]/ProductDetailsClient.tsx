@@ -62,13 +62,17 @@ export default function ProductDetailsClient({ product, relatedProducts = [] }: 
   
   const addItem = useCartStore((state) => state.addItem);
 
+  const hasDiscount = Boolean(product.discount_price && Number(product.discount_price) > 0 && Number(product.discount_price) < Number(product.price));
+  const effectivePrice = hasDiscount ? Number(product.discount_price) : Number(product.price);
+  const discountPercent = hasDiscount ? Math.round(((Number(product.price) - Number(product.discount_price)) / Number(product.price)) * 100) : 0;
+
   const handleBuyNow = () => {
     addItem({
       id: product._id,
       name: product.name,
-      price: product.price,
+      price: effectivePrice,
       image: product.allImages?.[0] || '',
-      quantity: quantity,
+      quantity: 1,
       size: selectedSize,
       color: selectedColor,
     });
@@ -80,9 +84,9 @@ export default function ProductDetailsClient({ product, relatedProducts = [] }: 
     addItem({
       id: product._id,
       name: product.name,
-      price: product.price,
+      price: effectivePrice,
       image: product.allImages?.[0] || '',
-      quantity: quantity,
+      quantity: 1,
       size: selectedSize,
       color: selectedColor,
     });
@@ -188,8 +192,18 @@ export default function ProductDetailsClient({ product, relatedProducts = [] }: 
           </div>
 
           {/* Price */}
-          <div className="flex items-end gap-3 mb-6">
-            <span className="text-3xl font-bold text-charcoal">৳{product.price}</span>
+          <div className="flex items-baseline gap-3 mb-6">
+            {hasDiscount ? (
+              <>
+                <span className="text-3xl font-bold text-charcoal">৳{effectivePrice}</span>
+                <span className="text-xl text-gray-400 line-through">৳{product.price}</span>
+                <span className="bg-red-50 text-red-600 border border-red-200 text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">
+                  Save {discountPercent}%
+                </span>
+              </>
+            ) : (
+              <span className="text-3xl font-bold text-charcoal">৳{product.price}</span>
+            )}
           </div>
 
           {/* Short Description */}
@@ -250,56 +264,35 @@ export default function ProductDetailsClient({ product, relatedProducts = [] }: 
 
           {/* Purchase Actions */}
           <div className="flex flex-col gap-3 mb-5">
-            <div className="flex gap-3 h-12">
-              {/* Quantity */}
-              <div className="flex items-center justify-between border border-gray-200 rounded-full px-2 w-32 shrink-0 bg-white">
-                <button 
-                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-charcoal rounded-full transition-colors"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 12H4"></path></svg>
-                </button>
-                <span className="text-[15px] font-semibold text-charcoal w-6 text-center select-none">{quantity}</span>
-                <button 
-                  onClick={() => setQuantity(quantity + 1)}
-                  className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-charcoal rounded-full transition-colors"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4"></path></svg>
-                </button>
-              </div>
-
-              {/* Add to Cart */}
-              {product.stock > 0 ? (
+            {product.stock > 0 ? (
+              <>
                 <button 
                   onClick={handleAddToCart}
                   disabled={isAdding}
-                  className={`flex-1 text-[13px] tracking-widest uppercase font-semibold rounded-full transition-all flex items-center justify-center relative overflow-hidden group ${isAdding ? 'bg-green-600 text-white cursor-not-allowed shadow-inner' : 'bg-charcoal hover:bg-black text-white hover:shadow-[0_8px_20px_-8px_rgba(0,0,0,0.5)] transform hover:-translate-y-0.5'}`}
+                  className={`w-full h-12 text-[13px] tracking-widest uppercase font-semibold rounded-full transition-all flex items-center justify-center relative overflow-hidden group ${isAdding ? 'bg-green-600 text-white cursor-not-allowed shadow-inner' : 'bg-charcoal hover:bg-black text-white hover:shadow-[0_8px_20px_-8px_rgba(0,0,0,0.5)] transform hover:-translate-y-0.5'}`}
                 >
                   <span>{isAdding ? 'ADDED TO CART ✓' : 'ADD TO CART'}</span>
                 </button>
-              ) : (
-                <button 
-                  onClick={async () => {
-                    const token = localStorage.getItem('fcm_token_value');
-                    if (!token) return toast.error('Please allow notifications first to use this feature.');
-                    
-                    const res = await fetch('/api/notify-stock', {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({ productId: product._id, token })
-                    });
-                    if (res.ok) toast.success('We will notify you when back in stock!');
-                  }}
-                  className="flex-1 text-[13px] tracking-widest uppercase font-semibold rounded-full transition-all flex items-center justify-center relative overflow-hidden group bg-gray-200 text-gray-500 hover:bg-gray-300"
-                >
-                  <span>NOTIFY ME WHEN AVAILABLE</span>
+                <button onClick={handleBuyNow} className="w-full h-12 bg-white hover:bg-gray-50 border border-charcoal text-charcoal text-[13px] tracking-widest uppercase font-semibold rounded-full transition-all">
+                  BUY IT NOW
                 </button>
-              )}
-            </div>
-            
-            {product.stock > 0 && (
-              <button onClick={handleBuyNow} className="w-full h-12 bg-white hover:bg-gray-50 border border-charcoal text-charcoal text-[13px] tracking-widest uppercase font-semibold rounded-full transition-all">
-                BUY IT NOW
+              </>
+            ) : (
+              <button 
+                onClick={async () => {
+                  const token = localStorage.getItem('fcm_token_value');
+                  if (!token) return toast.error('Please allow notifications first to use this feature.');
+                  
+                  const res = await fetch('/api/notify-stock', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ productId: product._id, token })
+                  });
+                  if (res.ok) toast.success('We will notify you when back in stock!');
+                }}
+                className="w-full h-12 text-[13px] tracking-widest uppercase font-semibold rounded-full transition-all flex items-center justify-center relative overflow-hidden group bg-gray-200 text-gray-500 hover:bg-gray-300"
+              >
+                <span>NOTIFY ME WHEN AVAILABLE</span>
               </button>
             )}
           </div>
@@ -323,7 +316,7 @@ export default function ProductDetailsClient({ product, relatedProducts = [] }: 
                 <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${product.stock > 0 ? 'bg-green-400' : 'bg-red-400'}`}></span>
                 <span className={`relative inline-flex rounded-full h-3 w-3 ${product.stock > 0 ? 'bg-green-500' : 'bg-red-500'}`}></span>
               </span>
-              {product.stock > 0 ? `In Stock (${product.stock} available) - Ready to ship` : 'Out of Stock'}
+              {product.stock > 0 ? 'In Stock - Ready to ship' : 'Out of Stock'}
             </div>
             
             <div className="grid grid-cols-2 gap-y-3 gap-x-4 pt-4 border-t border-gray-200/60 text-sm text-charcoal font-medium">

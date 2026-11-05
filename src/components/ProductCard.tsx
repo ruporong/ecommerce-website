@@ -13,23 +13,26 @@ export default function ProductCard({ product }: { product: any }) {
 
   // Determine images
   const mainImage = product.mainImages?.[0] || product.images?.[0] || '';
-  const hoverImage = product.mainImages?.[1] || product.images?.[1] || mainImage;
+  const hoverImage = (product.mainImages && product.mainImages.length > 1) 
+    ? product.mainImages[1] 
+    : (product.images && product.images.length > 1) 
+      ? product.images[1] 
+      : '';
+  const hasHoverImage = Boolean(hoverImage && hoverImage !== mainImage);
+
+  // Discount calculation
+  const hasDiscount = Boolean(product.discount_price && Number(product.discount_price) > 0 && Number(product.discount_price) < Number(product.price));
+  const effectivePrice = hasDiscount ? Number(product.discount_price) : Number(product.price);
+  const discountPercent = hasDiscount ? Math.round(((Number(product.price) - Number(product.discount_price)) / Number(product.price)) * 100) : 0;
 
   const handleQuickAdd = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     
-    // Default to first size and color if available, otherwise empty
-    const selectedSize = product.sizes?.[0] || '';
-    const selectedColor = product.colors?.[0] || '';
-
-    // Create a unique ID if size/color variations are meant to be separate, 
-    // but the store currently uses just product.slug or id. 
-    // For a simple add, we just pass the product ID.
     addItem({
-      id: product._id || product.slug, // Prefer _id if available
+      id: product._id || product.slug,
       name: product.name,
-      price: product.price,
+      price: effectivePrice,
       image: mainImage,
       quantity: 1
     });
@@ -57,28 +60,41 @@ export default function ProductCard({ product }: { product: any }) {
             <img 
               src={mainImage} 
               alt={product.name} 
-              className="w-full h-full object-cover object-top transition-opacity duration-700 ease-in-out opacity-100 group-hover:opacity-0"
+              className={`w-full h-full object-cover object-top transition-all duration-700 ease-in-out ${
+                hasHoverImage ? 'opacity-100 group-hover:opacity-0' : 'group-hover:scale-105'
+              }`}
             />
           ) : (
-            <PlaceholderImage className="w-full h-full object-cover object-top transition-opacity duration-700 ease-in-out opacity-100 group-hover:opacity-0" />
+            <PlaceholderImage className={`w-full h-full object-cover object-top transition-all duration-700 ease-in-out ${
+              hasHoverImage ? 'opacity-100 group-hover:opacity-0' : 'group-hover:scale-105'
+            }`} />
           )}
-          {hoverImage && hoverImage !== mainImage && (
+          {hasHoverImage && (
             <img 
               src={hoverImage} 
               alt={`${product.name} - Alternate View`} 
               className="absolute inset-0 w-full h-full object-cover object-top transition-all duration-700 ease-in-out opacity-0 group-hover:opacity-100 group-hover:scale-105"
             />
           )}
-          {product.stock === 0 && (
-            <div className="absolute top-4 left-4 bg-white/90 text-charcoal text-[10px] tracking-widest uppercase px-3 py-1 font-bold z-10">
-              Sold Out
-            </div>
-          )}
-          {product.stock > 0 && product.stock <= 5 && (
-            <div className="absolute top-4 left-4 bg-red-50 text-red-600 text-[10px] tracking-widest uppercase px-3 py-1 font-bold z-10">
-              Low Stock
-            </div>
-          )}
+
+          {/* Badges: Sold Out / Low Stock / Discount */}
+          <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10 pointer-events-none">
+            {product.stock === 0 && (
+              <span className="bg-white/95 text-charcoal text-[10px] tracking-widest uppercase px-2.5 py-1 font-bold rounded shadow-sm">
+                Sold Out
+              </span>
+            )}
+            {product.stock > 0 && product.stock <= 5 && (
+              <span className="bg-amber-50 text-amber-700 border border-amber-200 text-[10px] tracking-widest uppercase px-2.5 py-1 font-bold rounded shadow-sm">
+                Low Stock
+              </span>
+            )}
+            {hasDiscount && (
+              <span className="bg-red-600 text-white text-[10px] tracking-wider uppercase px-2 py-0.5 font-bold rounded shadow-sm">
+                -{discountPercent}%
+              </span>
+            )}
+          </div>
           
           {/* Hover Actions */}
           <div className="absolute top-3 right-3 flex flex-col gap-2 translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300 z-30">
@@ -123,14 +139,23 @@ export default function ProductCard({ product }: { product: any }) {
         </div>
       </Link>
       
-      <div className="flex justify-between items-start px-1">
-        <div>
-          <h3 className="font-serif text-lg mb-1 group-hover:text-dusty-rose transition-colors">
+      <div className="flex justify-between items-start px-1 gap-2">
+        <div className="min-w-0 flex-1">
+          <h3 className="font-serif text-base sm:text-lg mb-1 group-hover:text-dusty-rose transition-colors truncate">
             <Link href={`/product/${product.slug}`}>{product.name}</Link>
           </h3>
-          <p className="text-xs text-gray-500 tracking-widest uppercase">{product.category}</p>
+          <p className="text-xs text-gray-500 tracking-widest uppercase truncate">{product.category}</p>
         </div>
-        <span className="font-serif text-lg">৳{product.price}</span>
+        <div className="text-right shrink-0">
+          {hasDiscount ? (
+            <div className="flex flex-col items-end">
+              <span className="font-serif text-base sm:text-lg font-semibold text-charcoal">৳{effectivePrice}</span>
+              <span className="text-xs text-gray-400 line-through">৳{product.price}</span>
+            </div>
+          ) : (
+            <span className="font-serif text-base sm:text-lg font-medium text-charcoal">৳{product.price}</span>
+          )}
+        </div>
       </div>
     </div>
   );

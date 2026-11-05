@@ -29,11 +29,14 @@ export default function QuickViewModal() {
   const nextImage = () => setCurrentImageIndex((prev) => (prev + 1) % uniqueImages.length);
   const prevImage = () => setCurrentImageIndex((prev) => (prev - 1 + uniqueImages.length) % uniqueImages.length);
 
+  const hasDiscount = Boolean(product.discount_price && Number(product.discount_price) > 0 && Number(product.discount_price) < Number(product.price));
+  const effectivePrice = hasDiscount ? Number(product.discount_price) : Number(product.price);
+
   const handleQuickAdd = () => {
     addItem({
       id: product._id || product.slug,
       name: product.name,
-      price: product.price,
+      price: effectivePrice,
       image: displayImage,
       quantity: 1
     });
@@ -90,7 +93,14 @@ export default function QuickViewModal() {
               <div className="flex text-charcoal">★★★★★</div>
               <span className="text-sm text-gray-500">4.9 (126 Reviews)</span>
             </div>
-            <p className="text-xl font-medium mb-8">৳{product.price}</p>
+            {hasDiscount ? (
+              <div className="flex items-baseline gap-3 mb-8">
+                <span className="text-2xl font-bold text-charcoal">৳{effectivePrice}</span>
+                <span className="text-base text-gray-400 line-through">৳{product.price}</span>
+              </div>
+            ) : (
+              <p className="text-xl font-medium mb-8">৳{product.price}</p>
+            )}
             
             {product.colors && product.colors.length > 0 && (
               <div className="mb-6">
