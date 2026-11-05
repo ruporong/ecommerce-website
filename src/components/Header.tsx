@@ -87,10 +87,10 @@ export default function Header({
     <header className="sticky top-0 w-full z-40 bg-white shadow-sm">
       {flashSale && <FlashSaleBanner data={flashSale} />}
       <div className="w-full bg-white border-b border-gray-200/80">
-        <div className="max-w-[1920px] mx-auto px-4 md:px-8 h-20 flex items-center justify-between gap-4">
+        <div className="max-w-[1920px] mx-auto px-3 sm:px-4 md:px-8 h-16 sm:h-20 flex items-center justify-between gap-2 sm:gap-4">
         
           {/* LEFT: Logo & Mobile Hamburger */}
-          <div className="flex items-center gap-3 sm:gap-4 shrink-0">
+          <div className="flex items-center gap-2.5 sm:gap-4 shrink-0">
             <button 
               type="button"
               onClick={() => {
@@ -107,9 +107,9 @@ export default function Header({
 
             <Link href="/" className="shrink-0 flex items-center">
               {logoUrl ? (
-                <img src={logoUrl} alt="Store Logo" className="h-9 md:h-12 w-auto max-w-[170px] md:max-w-[220px] object-contain" />
+                <img src={logoUrl} alt="Store Logo" className="h-8 sm:h-9 md:h-12 w-auto max-w-[130px] sm:max-w-[170px] md:max-w-[220px] object-contain" />
               ) : (
-                <div className="h-10 w-32 bg-gray-200 rounded flex items-center justify-center text-xs text-gray-500 font-sans tracking-normal">No Logo</div>
+                <div className="h-9 sm:h-10 w-28 sm:w-32 bg-gray-200 rounded flex items-center justify-center text-xs text-gray-500 font-sans tracking-normal">No Logo</div>
               )}
             </Link>
           </div>
@@ -135,15 +135,15 @@ export default function Header({
           </nav>
 
           {/* RIGHT: Actions */}
-          <div className="flex items-center gap-3 sm:gap-4 md:gap-5 shrink-0 justify-end">
+          <div className="flex items-center gap-2 sm:gap-4 md:gap-5 shrink-0 justify-end">
             
             {/* Desktop Search Bar (xl and above) */}
             <div className="hidden xl:flex items-center">
               <HeaderSearch className="w-48 xl:w-60" />
             </div>
 
-            {/* Account Icon */}
-            <Link href={accountLink} aria-label="Account" className="hover:opacity-70 transition-opacity">
+            {/* Account Icon (hidden on mobile, present in mobile bottom bar) */}
+            <Link href={accountLink} aria-label="Account" className="hidden sm:flex hover:opacity-70 transition-opacity">
               {session?.user ? (
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                   <path fillRule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clipRule="evenodd" />

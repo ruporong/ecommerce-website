@@ -57,7 +57,7 @@ export default function WebChat() {
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             cursor: pointer;
             z-index: 9999;
-            transition: transform 0.2s;
+            transition: transform 0.2s, bottom 0.2s;
             border: none;
             outline: none;
         }
@@ -85,6 +85,24 @@ export default function WebChat() {
             pointer-events: none;
             overflow: hidden;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        @media (max-width: 768px) {
+            #web-chat-toggle {
+                bottom: 80px;
+                right: 16px;
+                width: 48px;
+                height: 48px;
+            }
+            #web-chat-window {
+                bottom: 140px;
+                right: 12px;
+                left: 12px;
+                width: calc(100vw - 24px);
+                max-width: 380px;
+                height: 480px;
+                max-height: 65vh;
+            }
         }
         
         #web-chat-window.chat-active {

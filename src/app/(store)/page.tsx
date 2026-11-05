@@ -30,12 +30,11 @@ export default async function Home() {
       let sectionProducts = [] as any[];
       
       if (sec.type === 'new_arrivals') {
-        sectionProducts = await Product.find({ is_active: true }).sort({ createdAt: -1 }).limit(8).lean();
+        sectionProducts = await Product.find({ is_active: true }).sort({ createdAt: -1 }).lean();
       } else if (sec.type === 'featured') {
-        // Just picking random or latest for now if no specific 'featured' flag
-        sectionProducts = await Product.find({ is_active: true }).sort({ updatedAt: -1 }).limit(8).lean();
+        sectionProducts = await Product.find({ is_active: true }).sort({ updatedAt: -1 }).lean();
       } else if (sec.type === 'category' && sec.category_id) {
-        sectionProducts = await Product.find({ is_active: true, category_id: sec.category_id }).limit(8).lean();
+        sectionProducts = await Product.find({ is_active: true, category_id: sec.category_id }).sort({ createdAt: -1 }).lean();
       } else if (sec.type === 'custom' && sec.products?.length > 0) {
         sectionProducts = await Product.find({ _id: { $in: sec.products }, is_active: true }).lean();
       }
