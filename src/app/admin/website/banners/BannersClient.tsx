@@ -118,31 +118,31 @@ function BannerForm({ defaultValues, bannerType, loading, onSubmit, onCancel }: 
           name="title" 
           defaultValue={defaultValues?.title} 
           className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-black focus:border-transparent outline-none transition-all text-sm" 
-          placeholder="E.g. THE NEW SEASON." 
+          placeholder={bannerType === "auth" ? "E.g. Exquisite Handcrafted Traditional Wear" : "E.g. THE NEW SEASON."} 
         />
       </div>
 
       <div>
         <label className="block text-sm font-semibold mb-1 text-gray-700">
-          Subtitle <span className="text-gray-400 font-normal text-xs">(Optional)</span>
+          {bannerType === "auth" ? "Category Pill / Badge" : "Subtitle"} <span className="text-gray-400 font-normal text-xs">(Optional)</span>
         </label>
         <input 
           name="subtitle" 
           defaultValue={defaultValues?.subtitle} 
           className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-black focus:border-transparent outline-none transition-all text-sm" 
-          placeholder="E.g. Modern silhouettes." 
+          placeholder={bannerType === "auth" ? "E.g. FESTIVE COLLECTION" : "E.g. Modern silhouettes."} 
         />
       </div>
 
       <div>
         <label className="block text-sm font-semibold mb-1 text-gray-700">
-          Link URL <span className="text-gray-400 font-normal text-xs">(Optional)</span>
+          {bannerType === "auth" ? "Description / Tagline" : "Link URL"} <span className="text-gray-400 font-normal text-xs">(Optional)</span>
         </label>
         <input 
           name="link" 
           defaultValue={defaultValues?.link} 
           className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-black focus:border-transparent outline-none transition-all text-sm" 
-          placeholder="E.g. /category/dresses or leave blank" 
+          placeholder={bannerType === "auth" ? "E.g. Timeless three-piece and saree collections crafted with royal elegance..." : "E.g. /category/dresses or leave blank"} 
         />
       </div>
 

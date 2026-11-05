@@ -10,8 +10,7 @@ import { revalidatePath } from 'next/cache';
 
 import { v2 as cloudinary } from 'cloudinary';
 
-import { getServerSession } from "next-auth";
-import { getAuthOptions } from "@/lib/auth";
+import { getAuthenticatedUser } from "@/lib/auth";
 
 // Configure cloudinary
 const cloudinaryUrl = process.env.CLOUDINARY_URL || '';
@@ -44,8 +43,8 @@ async function uploadFiles(formData: FormData, fieldName: string, folder: string
 
 // --- Banners ---
 export async function createBanner(formData: FormData) {
-  const session = await getServerSession(await getAuthOptions());
-  if (!session || (session.user as any)?.role !== 'admin') {
+  const user = await getAuthenticatedUser();
+  if (!user || user.role !== 'admin') {
     return { success: false, error: 'Unauthorized. Admin access required.' };
   }
 
@@ -69,6 +68,7 @@ export async function createBanner(formData: FormData) {
 
     const banner = await Banner.create({
       image: imageUrl,
+      type: (formData.get('type') as string) || 'home',
       title: formData.get('title'),
       subtitle: formData.get('subtitle'),
       link: formData.get('link'),
@@ -77,6 +77,10 @@ export async function createBanner(formData: FormData) {
       status: formData.get('status') || 'active'
     });
     revalidatePath('/admin/website/banners');
+    revalidatePath('/admin/website/auth-slider');
+    revalidatePath('/admin/login');
+    revalidatePath('/user/login');
+    revalidatePath('/user/signup');
     revalidatePath('/');
     return { success: true, data: JSON.parse(JSON.stringify(banner)) };
   } catch (error: any) {
@@ -85,8 +89,8 @@ export async function createBanner(formData: FormData) {
 }
 
 export async function updateBanner(id: string, formData: FormData) {
-  const session = await getServerSession(await getAuthOptions());
-  if (!session || (session.user as any)?.role !== 'admin') {
+  const user = await getAuthenticatedUser();
+  if (!user || user.role !== 'admin') {
     return { success: false, error: 'Unauthorized. Admin access required.' };
   }
 
@@ -116,6 +120,10 @@ export async function updateBanner(id: string, formData: FormData) {
 
     const banner = await Banner.findByIdAndUpdate(id, updateData, { new: true });
     revalidatePath('/admin/website/banners');
+    revalidatePath('/admin/website/auth-slider');
+    revalidatePath('/admin/login');
+    revalidatePath('/user/login');
+    revalidatePath('/user/signup');
     revalidatePath('/');
     return { success: true, data: JSON.parse(JSON.stringify(banner)) };
   } catch (error: any) {
@@ -124,8 +132,8 @@ export async function updateBanner(id: string, formData: FormData) {
 }
 
 export async function deleteBanner(id: string) {
-  const session = await getServerSession(await getAuthOptions());
-  if (!session || (session.user as any)?.role !== 'admin') {
+  const user = await getAuthenticatedUser();
+  if (!user || user.role !== 'admin') {
     return { success: false, error: 'Unauthorized. Admin access required.' };
   }
 
@@ -133,6 +141,10 @@ export async function deleteBanner(id: string) {
     await connectToDatabase();
     await Banner.findByIdAndDelete(id);
     revalidatePath('/admin/website/banners');
+    revalidatePath('/admin/website/auth-slider');
+    revalidatePath('/admin/login');
+    revalidatePath('/user/login');
+    revalidatePath('/user/signup');
     revalidatePath('/');
     return { success: true };
   } catch (error: any) {
@@ -142,8 +154,8 @@ export async function deleteBanner(id: string) {
 
 // --- Sections ---
 export async function createSection(formData: FormData) {
-  const session = await getServerSession(await getAuthOptions());
-  if (!session || (session.user as any)?.role !== 'admin') {
+  const user = await getAuthenticatedUser();
+  if (!user || user.role !== 'admin') {
     return { success: false, error: 'Unauthorized. Admin access required.' };
   }
 
@@ -172,8 +184,8 @@ export async function createSection(formData: FormData) {
 }
 
 export async function updateSection(id: string, formData: FormData) {
-  const session = await getServerSession(await getAuthOptions());
-  if (!session || (session.user as any)?.role !== 'admin') {
+  const user = await getAuthenticatedUser();
+  if (!user || user.role !== 'admin') {
     return { success: false, error: 'Unauthorized. Admin access required.' };
   }
 
@@ -203,8 +215,8 @@ export async function updateSection(id: string, formData: FormData) {
 }
 
 export async function deleteSection(id: string) {
-  const session = await getServerSession(await getAuthOptions());
-  if (!session || (session.user as any)?.role !== 'admin') {
+  const user = await getAuthenticatedUser();
+  if (!user || user.role !== 'admin') {
     return { success: false, error: 'Unauthorized. Admin access required.' };
   }
 
@@ -221,8 +233,8 @@ export async function deleteSection(id: string) {
 
 // --- Menus ---
 export async function createMenu(formData: FormData) {
-  const session = await getServerSession(await getAuthOptions());
-  if (!session || (session.user as any)?.role !== 'admin') {
+  const user = await getAuthenticatedUser();
+  if (!user || user.role !== 'admin') {
     return { success: false, error: 'Unauthorized. Admin access required.' };
   }
 
@@ -245,8 +257,8 @@ export async function createMenu(formData: FormData) {
 }
 
 export async function deleteMenu(id: string, position: string) {
-  const session = await getServerSession(await getAuthOptions());
-  if (!session || (session.user as any)?.role !== 'admin') {
+  const user = await getAuthenticatedUser();
+  if (!user || user.role !== 'admin') {
     return { success: false, error: 'Unauthorized. Admin access required.' };
   }
 
@@ -263,8 +275,8 @@ export async function deleteMenu(id: string, position: string) {
 
 // --- Pages ---
 export async function createPage(formData: FormData) {
-  const session = await getServerSession(await getAuthOptions());
-  if (!session || (session.user as any)?.role !== 'admin') {
+  const user = await getAuthenticatedUser();
+  if (!user || user.role !== 'admin') {
     return { success: false, error: 'Unauthorized. Admin access required.' };
   }
 
@@ -288,8 +300,8 @@ export async function createPage(formData: FormData) {
 }
 
 export async function deletePage(id: string) {
-  const session = await getServerSession(await getAuthOptions());
-  if (!session || (session.user as any)?.role !== 'admin') {
+  const user = await getAuthenticatedUser();
+  if (!user || user.role !== 'admin') {
     return { success: false, error: 'Unauthorized. Admin access required.' };
   }
 
@@ -305,8 +317,8 @@ export async function deletePage(id: string) {
 
 // --- Social Links ---
 export async function saveSocialLinks(links: any[]) {
-  const session = await getServerSession(await getAuthOptions());
-  if (!session || (session.user as any)?.role !== 'admin') {
+  const user = await getAuthenticatedUser();
+  if (!user || user.role !== 'admin') {
     return { success: false, error: 'Unauthorized. Admin access required.' };
   }
 
