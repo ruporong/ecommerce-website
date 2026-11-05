@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import QuickViewModal from "@/components/QuickViewModal";
 import CartDrawer from "@/components/CartDrawer";
 import WishlistDrawer from "@/components/WishlistDrawer";
+import MobileBottomBar from "@/components/MobileBottomBar";
 import WebChat from "@/components/WebChat";
 import CartSyncListener from "@/components/CartSyncListener";
 import FlashSale from "@/models/FlashSale";
@@ -83,12 +84,15 @@ export default async function StoreLayout({
       
       <Header menus={headerMenus} categories={categories} logoUrl={logoDark} flashSale={flashSale} />
 
-      {children}
+      <div className="pb-16 md:pb-0">
+        {children}
+      </div>
 
       <Footer menus={footerMenus} categories={categories} socialLinks={socialLinks} logoUrl={logoLight} storeName={storeName} />
       <QuickViewModal />
       <CartDrawer />
       <WishlistDrawer />
+      <MobileBottomBar />
       <WebChat />
       <CartSyncListener />
 

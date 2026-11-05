@@ -46,7 +46,8 @@ export default function WishlistDrawer() {
 
       {/* Wishlist Drawer */}
       <div 
-        className={`fixed inset-y-0 right-0 w-full sm:w-[450px] bg-white z-[100] shadow-2xl transition-transform duration-500 flex flex-col ${
+        style={{ width: '100%', maxWidth: '450px' }}
+        className={`fixed inset-y-0 right-0 w-full md:w-[450px] max-w-[450px] bg-white z-[100] shadow-2xl transition-transform duration-500 flex flex-col ${
           isDrawerOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >

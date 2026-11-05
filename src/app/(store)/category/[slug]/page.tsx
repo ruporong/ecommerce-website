@@ -125,7 +125,7 @@ export default async function CategoryPage({
           </div>
 
           {products.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-4 sm:gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-5">
               {products.map((product: any) => (
                 <div key={product._id} className="w-full">
                   <ProductCard product={product} />

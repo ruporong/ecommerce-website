@@ -89,13 +89,13 @@ export default function Header({
       <div className="w-full bg-warm-white/95 backdrop-blur-sm border-b border-gray-200">
         <div className="max-w-[1920px] mx-auto px-4 md:px-8 h-20 flex items-center justify-between relative">
         
-        {/* Mobile Menu */}
+        {/* Mobile/Tablet Menu Button */}
         <button 
           onClick={() => {
             setMobileMenuOpen(!mobileMenuOpen);
             if (mobileSearchOpen) setMobileSearchOpen(false);
           }}
-          className="md:hidden flex flex-col justify-center gap-1.5 w-8 h-8 z-50 focus:outline-none"
+          className="lg:hidden flex flex-col justify-center gap-1.5 w-8 h-8 z-50 focus:outline-none"
         >
           <span className={`w-6 h-0.5 bg-charcoal transition-transform duration-300 ${mobileMenuOpen ? 'rotate-45 translate-y-2' : ''}`}></span>
           <span className={`w-6 h-0.5 bg-charcoal transition-opacity duration-300 ${mobileMenuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
@@ -103,23 +103,23 @@ export default function Header({
         </button>
 
         {/* Logo */}
-        <Link href="/" className="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 z-50">
+        <Link href="/" className="absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0 z-50 shrink-0">
           {logoUrl ? (
-            <img src={logoUrl} alt="Store Logo" className="h-9 md:h-12 w-auto max-w-[180px] md:max-w-[240px] object-contain" />
+            <img src={logoUrl} alt="Store Logo" className="h-9 md:h-11 w-auto max-w-[170px] md:max-w-[220px] object-contain" />
           ) : (
             <div className="h-10 w-32 bg-gray-200 rounded flex items-center justify-center text-xs text-gray-500 font-sans tracking-normal">No Logo</div>
           )}
         </Link>
 
-        {/* Desktop Nav with higher font weight and reduced items */}
-        <nav className="hidden md:flex items-center gap-7 lg:gap-10 max-w-[62%] py-1">
+        {/* Desktop Nav (lg screens and above, never breaks) */}
+        <nav className="hidden lg:flex items-center gap-6 xl:gap-8 max-w-[60%] py-1">
           {desktopNavLinks.map((menu, idx) => {
             const isActive = pathname === menu.link;
             return (
               <Link 
                 key={idx} 
                 href={menu.link} 
-                className={`text-xs lg:text-[13px] tracking-[0.2em] uppercase whitespace-nowrap transition-colors duration-200 ${
+                className={`text-xs xl:text-[13px] tracking-[0.18em] uppercase whitespace-nowrap transition-colors duration-200 ${
                   isActive 
                     ? 'text-black font-extrabold border-b-2 border-black pb-0.5' 
                     : 'text-black/90 font-bold hover:text-black hover:border-b-2 hover:border-black/50 pb-0.5'
@@ -132,11 +132,11 @@ export default function Header({
         </nav>
 
         {/* Right Actions */}
-        <div className="flex items-center gap-3 sm:gap-4 md:gap-5 z-50">
+        <div className="flex items-center gap-3 sm:gap-4 md:gap-5 z-50 shrink-0">
           
-          {/* Desktop Search Bar */}
-          <div className="hidden md:flex items-center">
-            <HeaderSearch className="w-52 lg:w-72" />
+          {/* Desktop Search Bar (xl and above) */}
+          <div className="hidden xl:flex items-center">
+            <HeaderSearch className="w-48 xl:w-60" />
           </div>
 
           {/* Account Icon */}
@@ -152,7 +152,7 @@ export default function Header({
             )}
           </Link>
 
-          {/* Mobile Search Button Toggle */}
+          {/* Search Button Toggle (below xl) */}
           <button 
             type="button"
             aria-label="Search" 
@@ -160,7 +160,7 @@ export default function Header({
               setMobileSearchOpen(!mobileSearchOpen);
               if (mobileMenuOpen) setMobileMenuOpen(false);
             }}
-            className="md:hidden hover:opacity-70 transition-opacity"
+            className="xl:hidden hover:opacity-70 transition-opacity"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
           </button>
@@ -200,9 +200,9 @@ export default function Header({
       </div>
       </div>
 
-      {/* Mobile Expandable Search Bar */}
+      {/* Expandable Search Bar (below xl) */}
       {mobileSearchOpen && (
-        <div className="md:hidden px-4 py-3 bg-warm-white border-t border-gray-200">
+        <div className="xl:hidden px-4 py-3 bg-warm-white border-t border-gray-200">
           <HeaderSearch 
             placeholder="Search products..." 
             onSearchSubmit={() => setMobileSearchOpen(false)} 
@@ -210,8 +210,8 @@ export default function Header({
         </div>
       )}
       
-      {/* Mobile Menu Dropdown */}
-      <div className={`md:hidden absolute top-full left-0 w-full bg-warm-white border-b border-gray-200 shadow-xl transition-all duration-300 ease-in-out ${mobileMenuOpen ? 'max-h-[85vh] overflow-y-auto opacity-100 visible' : 'max-h-0 opacity-0 invisible'}`}>
+      {/* Mobile/Tablet Drawer Dropdown */}
+      <div className={`lg:hidden absolute top-full left-0 w-full bg-warm-white border-b border-gray-200 shadow-xl transition-all duration-300 ease-in-out ${mobileMenuOpen ? 'max-h-[85vh] overflow-y-auto opacity-100 visible' : 'max-h-0 opacity-0 invisible'}`}>
          <nav className="flex flex-col px-6 py-4 space-y-5">
            {/* Mobile Search inside drawer */}
            <div className="pb-3 border-b border-gray-200/80">
